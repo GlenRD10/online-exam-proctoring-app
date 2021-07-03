@@ -28,24 +28,6 @@ function Link (props) {
 function App() {
   return (
     <div>
-      {/* <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
-        <LinkContainer to="/">
-          <Navbar.Brand className="font-weight-bold text-muted">
-            Welcome
-          </Navbar.Brand>
-        </LinkContainer>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          <Nav activeKey={window.location.pathname}>
-            <LinkContainer to="/signup">
-              <Nav.Link>Contact Us</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/login">
-              <Nav.Link>Login</Nav.Link>
-            </LinkContainer>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar> */}
       <nav className="navbar">
             <h1>Welcome</h1>
             <div className="navlinks">
@@ -56,6 +38,7 @@ function App() {
                         )
                     })
                 }
+                <a href="www" className="icon" ><i className="fa fa-bars"></i></a>
             </div>
         </nav>
       <Routes />

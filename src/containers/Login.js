@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Login.css";
+import axios from "axios"
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,14 +13,36 @@ export default function Login() {
     return email.length > 0 && password.length > 0;
   }
 
-  var isVerified = false;
-
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    if(isVerified) {
-        alert("You have succesfully logged in");
-    } else {
-        alert("Please verify that you are not a robot");
+    const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/online_student_login_access';
+    let data = {
+        exam_session: "SUMMER-2021",
+        user_id: email,
+        login_password: password,
+        ip: "0.0.0.0",
+    };
+    data = Object.keys(data).map(function(key) {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+    }).join('&');
+    const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+    try {
+        const response = await axios({
+            method: 'post',
+            url,
+            crossDomain: true,
+            data,
+            headers
+        });
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(response.data, 'text/xml');
+        const message = xml.querySelector('string').textContent.split('~');
+        console.log(message);
+        alert(message);
+    } catch (error) {
+        console.log(error);
     }
   }
 
@@ -35,7 +58,6 @@ export default function Login() {
           <Form.Label>Email</Form.Label>
           <Form.Control
             autoFocus
-            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
