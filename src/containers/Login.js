@@ -4,8 +4,28 @@ import Button from "react-bootstrap/Button";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Login.css";
 import axios from "axios"
+import logo from './exam.png';
 
 export default function Login() {
+  const links = [
+    {
+        title: 'Home',
+        href: '#'
+    },
+    {
+        title: 'About',
+        href: '#'
+    },
+    {
+        title: 'Contact',
+        href: '#'
+    },
+  ]
+  
+  function Link (props) {
+    return <a href={props.href} className="link">{props.title}</a>
+  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -52,6 +72,19 @@ export default function Login() {
 
   return (
       <div className="login-main"><div className="Login">
+        <nav className="navbar">
+            <h1>Welcome</h1>
+            <div className="navlinks">
+                {
+                    links.map((link, i) => {
+                        return (
+                            <Link key={i} {...link}></Link>
+                        )
+                    })
+                }
+                <a href="www" className="icon" ><i className="fa fa-bars"></i></a>
+            </div>
+        </nav>
       <Form onSubmit={handleSubmit}>
           <h1>Login to your account</h1>
         <Form.Group size="lg" controlId="email">
@@ -82,10 +115,11 @@ export default function Login() {
           Login
         </Button>
 
-      </Form>
+      </Form>      
+
     </div>
-    <img src={'https://assets.materialup.com/uploads/c69e374a-ab60-4914-a4e7-1a92ab88e732/preview.jpg'} alt="" className="login-image"/>
-    
+    {/* <img src={'https://assets.materialup.com/uploads/c69e374a-ab60-4914-a4e7-1a92ab88e732/preview.jpg'} alt="" className="login-image"/> */}
+    <img src={logo} alt="login" className="login-image" />
     </div>
   );
 }
