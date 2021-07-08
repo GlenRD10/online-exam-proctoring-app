@@ -1,25 +1,25 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import Home from "./containers/Home";
+import { Route, Routes } from "react-router-dom";
+import Home from "./containers/login/Home";
 import NotFound from "./containers/NotFound";
-import Login from "./containers/Login";
-import Dashboard from "./containers/Dasboard";
+import Login from "./containers/login/Login";
+import Dashboard from "./containers/dashboard/Dashboard";
 
-export default function Routes() {
+export default function RoutesMain() {
   return (
-    <Switch>
+    <Routes>
       <Route exact path="/">
         <Home />
       </Route>
       <Route exact path="/login">
         <Login />
       </Route>
-      <Route eaxcat path="/dashboard">
+      <Route exact path="/dashboard">
         <Dashboard />
       </Route>
       <Route>
         <NotFound />
       </Route>
-    </Switch>
+    </Routes>
   );
 }

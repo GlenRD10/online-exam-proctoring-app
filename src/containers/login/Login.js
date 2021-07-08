@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -7,6 +8,8 @@ import axios from "axios"
 import logo from './exam.png';
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const links = [
     {
         title: 'Home',
@@ -60,7 +63,16 @@ export default function Login() {
         const xml = parser.parseFromString(response.data, 'text/xml');
         const message = xml.querySelector('string').textContent.split('~');
         console.log(message);
-        alert(message);
+
+        
+        if(message[0] === 'success') {
+          localStorage.setItem('session_id', message[1]);
+          localStorage.setItem('user_id', message[3]);
+          navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+        }
+        else {
+          alert(message);
+        }
     } catch (error) {
         console.log(error);
     }
