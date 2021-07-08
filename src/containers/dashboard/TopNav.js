@@ -5,8 +5,8 @@ import './topnav.css'
 
 
 export default function TopNav () {
-    const name = 'Rishabh Pathak';
-    const email = 'rishabh2000.pathak@outlook.com'
+    const name = localStorage.getItem('user_name');
+    const email = localStorage.getItem('user_id');
     return (
         <nav className="navbar">
             <div className="user">

@@ -2,18 +2,22 @@ import React from 'react';
 import './schedule.css';
 
 export default function Schedule (props) {
-    console.log("schedule");
-    console.log(props.examData);
     const filteredArray = props.examData.filter((item, index) => {
+        if (item[13] === 'Start Exam')
+            item[13] = 'ongoing';
+        else if (item[13] === 'Exam Allocated') 
+            item[13] = 'yet-to-start';
+        else if (item[13] === 'Exam Expired')
+            item[13] = 'expired';
+        else if (item[13] === 'Completed')
+            item[13] = 'completed';
         return index%2 === 0;
     })
-
-    let statusArray = filteredArray.map(item => item[13]);
-    console.log(statusArray);
     
     return (
         <section className="schedule">
-            {filteredArray.map(data => <Card 
+            {filteredArray.map(data => <Card
+            title={data[1]}
             status={data[13]} 
             starts={data[8]} 
             expires={data[9]} 
@@ -44,18 +48,18 @@ const pStyle = {
 const Card = (props) => {
     const status = props.status;
     let statusTag = null;
-    if (status === 'Start Exam')
+    if (status === 'ongoing')
         statusTag = <div className="proceedBtn"><button><i className="fa fa-play-circle"></i> Proceed</button></div>
-    else if (status === 'Exam Expired')
+    else if (status === 'expired')
         statusTag = <p style={pStyle}>Link has expired</p>
-    else if (status === 'Exam Allocated')
+    else if (status === 'yet-to-start')
         statusTag = <p style={pStyle}>Link will be available in</p>
     else if (status === 'completed')
         statusTag = <p style={pStyle}>Completed</p>
 
     return (
         <article className={status + ' card'}>
-            <h3>Exam Name</h3>
+            <h3>{props.title}</h3>
             <div className="container">
                 <p>Starts: {props.starts}</p>
                 <p>Expires:{props.expires}</p>

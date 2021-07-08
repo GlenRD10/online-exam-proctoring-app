@@ -62,11 +62,10 @@ export default function Login() {
         const parser = new DOMParser();
         const xml = parser.parseFromString(response.data, 'text/xml');
         const message = xml.querySelector('string').textContent.split('~');
-        console.log(message);
 
-        
         if(message[0] === 'success') {
           localStorage.setItem('session_id', message[1]);
+          localStorage.setItem('user_name', message[2]);
           localStorage.setItem('user_id', message[3]);
           navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
         }
