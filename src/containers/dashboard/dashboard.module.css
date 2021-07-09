@@ -11,21 +11,21 @@ body {
   justify-content: space-between;
 }
 
-.sidebar-component {
+.sidebarComponent {
   width: 17%;
   height: 1000px;
 }
 
-.nav-and-schedule {
+.navAndSchedule {
   width: 83%;
 }
 
 @media screen and (max-width: 984px) {
-  .sidebar-component {
+  .sidebarComponent {
     display: none;
   }
 
-  .nav-and-schedule {
+  .navAndSchedule {
     width: 100%;
   }
 }

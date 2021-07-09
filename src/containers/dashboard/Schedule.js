@@ -1,5 +1,5 @@
 import React from 'react';
-import './schedule.css';
+import styles from './schedule.module.css';
 
 export default function Schedule (props) {
     const filteredArray = props.examData.filter((item, index) => {
@@ -15,7 +15,7 @@ export default function Schedule (props) {
     })
     
     return (
-        <section className="schedule">
+        <section className={styles.schedule}>
             {filteredArray.map(data => <Card
             title={data[1]}
             status={data[13]} 
@@ -46,21 +46,29 @@ const pStyle = {
 }
 
 const Card = (props) => {
-    const status = props.status;
+    let status = props.status;
     let statusTag = null;
-    if (status === 'ongoing')
-        statusTag = <div className="proceedBtn"><button><i className="fa fa-play-circle"></i> Proceed</button></div>
-    else if (status === 'expired')
-        statusTag = <p style={pStyle}>Link has expired</p>
-    else if (status === 'yet-to-start')
-        statusTag = <p style={pStyle}>Link will be available in</p>
-    else if (status === 'completed')
-        statusTag = <p style={pStyle}>Completed</p>
+    if (status === 'ongoing') {
+        statusTag = <div className={styles.proceedBtn}><button><i className="fa fa-play-circle"></i> Proceed</button></div>;
+        status = styles.ongoing;
+    }
+    else if (status === 'expired') {
+        statusTag = <p style={pStyle}>Link has expired</p>;
+        status = styles.expired;
+    }
+    else if (status === 'yet-to-start') {
+        statusTag = <p style={pStyle}>Link will be available in</p>;
+        status = styles.yetToStart;
+    }
+    else if (status === 'completed') {
+        statusTag = <p style={pStyle}>Completed</p>;
+        status = styles.completed;
+    }
 
     return (
-        <article className={status + ' card'}>
+        <article className={`${status} ${styles.card}`}>
             <h3>{props.title}</h3>
-            <div className="container">
+            <div className={styles.container}>
                 <p>Starts: {props.starts}</p>
                 <p>Expires:{props.expires}</p>
                 <p>Time Zone:{props.timezone}</p>
@@ -68,7 +76,7 @@ const Card = (props) => {
                 <p>Test Duration:{props.duration}</p>
                 <p>Time Remaining:{props.timeRemaining}</p>
             </div>
-            <span className="fadeEffect"></span>
+            <span className={styles.fadeEffect}></span>
             {statusTag}
         </article>
     )

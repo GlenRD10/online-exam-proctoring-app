@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Schedule from './Schedule';
 import TopNav from './TopNav';
 import Sidebar from './Sidebar';
-import './dashboard.css'
+import styles from './dashboard.module.css'
 import axios from 'axios';
 
 export default function Dashboard (props) {
@@ -53,11 +53,11 @@ export default function Dashboard (props) {
     }
 
     return (
-        <div className="dashboard">
-            <div className="sidebar-component">
+        <div className={styles.dashboard}>
+            <div className={styles.sidebarComponent}>
                 <Sidebar/>
             </div>
-            <div className="nav-and-schedule">
+            <div className={styles.navAndSchedule}>
                 <TopNav/>
                 {showCards && <Schedule examData={examData}/>}
                 {/* <Schedule examData={examData}/> */}
