@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Schedule from './Schedule';
 import TopNav from './TopNav';
 import Sidebar from './Sidebar';
+import Topbar from './Topbar'
 import styles from './dashboard.module.css'
 import axios from 'axios';
 
@@ -59,6 +60,7 @@ export default function Dashboard (props) {
             </div>
             <div className={styles.navAndSchedule}>
                 <TopNav/>
+                <Topbar/>
                 {showCards && <Schedule examData={examData}/>}
                 {/* <Schedule examData={examData}/> */}
             </div>
