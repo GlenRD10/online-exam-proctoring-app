@@ -46,6 +46,12 @@
   }
 }
 
+@media screen and (max-width: 984px) {
+  .schedule {
+    margin-top: 200px;
+  }
+}
+
 @media screen and (max-width: 814px) {
   .schedule {
     grid-template-columns: repeat(2, 1fr);
