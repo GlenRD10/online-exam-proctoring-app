@@ -23,10 +23,15 @@ export default function Topbar (props) {
         return index !== props.examData.length - 1;
     });
 
+    function clickHandler(e) {
+        const value = e.currentTarget.getAttribute("data-value");
+        props.setFilterFunction(value);
+    }
+
     return (
         <ul className={styles.topbar}>
             <li>
-                <button className={styles.drawerBtn}>
+                <button onClick={clickHandler} data-value="all" className={styles.drawerBtn}>
                     <span className={styles.text}>
                         <span className={styles.colorCode} style={{backgroundColor: 'brown'}}></span>
                         All
@@ -35,7 +40,7 @@ export default function Topbar (props) {
                 </button>
             </li>
             <li>
-                <button className={styles.drawerBtn}>
+                <button onClick={clickHandler} data-value="yet-to-start" className={styles.drawerBtn}>
                     <span className={styles.text}>
                         <span className={styles.colorCode} style={{backgroundColor: 'chocolate'}}></span>
                         Yet to Start
@@ -44,7 +49,7 @@ export default function Topbar (props) {
                 </button>
             </li>
             <li>
-                <button className={styles.drawerBtn}>
+                <button onClick={clickHandler} data-value="ongoing" className={styles.drawerBtn}>
                     <span className={styles.text}>
                         <span className={styles.colorCode} style={{backgroundColor: 'lightgreen'}}></span>
                         Ongoing
@@ -53,7 +58,7 @@ export default function Topbar (props) {
                 </button>
             </li>
             <li>
-                <button className={styles.drawerBtn}>
+                <button onClick={clickHandler} data-value="completed" className={styles.drawerBtn}>
                     <span className={styles.text}>
                         <span className={styles.colorCode} style={{backgroundColor: 'darkgreen'}}></span>
                         Completed
@@ -62,7 +67,7 @@ export default function Topbar (props) {
                 </button>
             </li>
             <li>
-                <button className={styles.drawerBtn}>
+                <button onClick={clickHandler} data-value="expired" className={styles.drawerBtn}>
                     <span className={styles.text}>
                         <span className={styles.colorCode} style={{backgroundColor: 'red'}}></span>
                         Expired

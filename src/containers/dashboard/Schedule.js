@@ -2,21 +2,26 @@ import React from 'react';
 import styles from './schedule.module.css';
 
 export default function Schedule (props) {
+    let index=0;
+    
     const filteredArray = props.examData.filter((item, index) => {
         if (item[13] === 'Start Exam')
             item[13] = 'ongoing';
-        else if (item[13] === 'Exam Allocated') 
+        else if (item[13] === 'Exam Allocated')
             item[13] = 'yet-to-start';
         else if (item[13] === 'Exam Expired')
             item[13] = 'expired';
         else if (item[13] === 'Completed')
             item[13] = 'completed';
-        return index !== props.examData.length - 1;
+        if(props.filter === 'all') 
+            return index !== props.examData.length - 1;
+        return index !== props.examData.length - 1 && props.filter === item[13];
     })
     
     return (
         <section className={styles.schedule}>
             {filteredArray.map(data => <Card
+            key={index++}
             title={data[1]}
             status={data[13]} 
             starts={data[8]} 
@@ -28,16 +33,6 @@ export default function Schedule (props) {
         />)}
         </section>
     );
-    // return (
-    //     <section className="schedule">
-    //         <Card status='ongoing'/>
-    //         <Card status='expired'/>
-    //         <Card status='expired'/>
-    //         <Card status='yet-to-start'/>
-    //         <Card status='ongoing'/>
-    //         <Card status='completed'/>
-    //     </section>    
-    // )
 }
 
 const pStyle = {

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './sidebar.module.css'
 
 export default function Sidebar (props) {
+    
     let ongoingCards = 0, yetToStartCards = 0, expiredCards = 0, completedCards = 0;
 
     console.log(props.examData);
@@ -22,12 +23,17 @@ export default function Sidebar (props) {
         return index !== props.examData.length - 1;
     });
 
+    function clickHandler(e) {
+        const value = e.currentTarget.getAttribute("data-value");
+        props.setFilterFunction(value);
+    }
+
     return (
         <div className={styles.sidebar}>
             <div className={styles.search}><input type="text" name="" id="" placeholder="Search..." className={styles.searchbar} /></div>
             <ul>
                 <li>
-                    <button className={styles.drawerBtn}>
+                    <button onClick={clickHandler} data-value="all" className={styles.drawerBtn}>
                         <span className={styles.text}>
                             <span className={styles.colorCode} style={{backgroundColor: 'brown'}}></span>
                             All
@@ -36,7 +42,7 @@ export default function Sidebar (props) {
                     </button>
                 </li>
                 <li>
-                    <button className={styles.drawerBtn}>
+                    <button onClick={clickHandler} data-value="yet-to-start" className={styles.drawerBtn}>
                         <span className={styles.text}>
                             <span className={styles.colorCode} style={{backgroundColor: 'chocolate'}}></span>
                             Yet to Start
@@ -45,7 +51,7 @@ export default function Sidebar (props) {
                     </button>
                 </li>
                 <li>
-                    <button className={styles.drawerBtn}>
+                    <button onClick={clickHandler} data-value="ongoing" className={styles.drawerBtn}>
                         <span className={styles.text}>
                             <span className={styles.colorCode} style={{backgroundColor: 'lightgreen'}}></span>
                             Ongoing
@@ -54,7 +60,7 @@ export default function Sidebar (props) {
                     </button>
                 </li>
                 <li>
-                    <button className={styles.drawerBtn}>
+                    <button onClick={clickHandler} data-value="completed" className={styles.drawerBtn}>
                         <span className={styles.text}>
                             <span className={styles.colorCode} style={{backgroundColor: 'darkgreen'}}></span>
                             Completed
@@ -63,7 +69,7 @@ export default function Sidebar (props) {
                     </button>
                 </li>
                 <li>
-                    <button className={styles.drawerBtn}>
+                    <button onClick={clickHandler} data-value="expired" className={styles.drawerBtn}>
                         <span className={styles.text}>
                             <span className={styles.colorCode} style={{backgroundColor: 'red'}}></span>
                             Expired

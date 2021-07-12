@@ -11,6 +11,7 @@ export default function Dashboard (props) {
     const [examData, setExamData] = useState([]);
     const [showCards, setShowCards] = useState(false);
     const [showLegends, setShowLegends] = useState(false);
+    const [filter, setFilter] = useState('all');
 
     const location = useLocation();
         let data = {
@@ -55,15 +56,19 @@ export default function Dashboard (props) {
 
     }
 
+    function setFilterFunction(filterValue) {
+        setFilter(filterValue);
+    }
+
     return (
         <div className={styles.dashboard}>
             <div className={styles.sidebarComponent}>
-                {showLegends && <Sidebar examData={examData}/>}
+                {showLegends && <Sidebar examData={examData} setFilterFunction={setFilterFunction}/>}
             </div>
             <div className={styles.navAndSchedule}>
                 <TopNav/>
-                {showLegends && <Topbar examData={examData}/>}
-                {showCards && <Schedule examData={examData}/>}
+                {showLegends && <Topbar examData={examData} setFilterFunction={setFilterFunction}/>}
+                {showCards && <Schedule examData={examData} filter={filter}/>}
             </div>
         </div>
     )
