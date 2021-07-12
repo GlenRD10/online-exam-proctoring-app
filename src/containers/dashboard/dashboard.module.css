@@ -13,11 +13,13 @@ body {
 
 .sidebarComponent {
   width: 17%;
-  height: 170vh;
+  height: 100vh;
+  position: fixed;
 }
 
 .navAndSchedule {
   width: 83%;
+  margin-left: 17%;
 }
 
 @media screen and (max-width: 984px) {
@@ -27,5 +29,6 @@ body {
 
   .navAndSchedule {
     width: 100%;
+    margin-left: 0;
   }
 }
