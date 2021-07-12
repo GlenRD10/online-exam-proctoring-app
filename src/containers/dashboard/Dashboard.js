@@ -10,6 +10,7 @@ import axios from 'axios';
 export default function Dashboard (props) {
     const [examData, setExamData] = useState([]);
     const [showCards, setShowCards] = useState(false);
+    const [showLegends, setShowLegends] = useState(false);
 
     const location = useLocation();
         let data = {
@@ -21,7 +22,7 @@ export default function Dashboard (props) {
 
     useEffect(() => {
         SendPostRequest();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     async function SendPostRequest() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
@@ -46,6 +47,7 @@ export default function Dashboard (props) {
             const exams = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
             setExamData(exams);
             setShowCards(true);
+            setShowLegends(true);
             
         } catch(e) {
             console.log(e.response);
@@ -56,13 +58,12 @@ export default function Dashboard (props) {
     return (
         <div className={styles.dashboard}>
             <div className={styles.sidebarComponent}>
-                <Sidebar/>
+                {showLegends && <Sidebar examData={examData}/>}
             </div>
             <div className={styles.navAndSchedule}>
                 <TopNav/>
                 <Topbar/>
                 {showCards && <Schedule examData={examData}/>}
-                {/* <Schedule examData={examData}/> */}
             </div>
         </div>
     )

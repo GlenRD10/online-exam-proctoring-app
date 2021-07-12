@@ -1,7 +1,28 @@
 import React from 'react';
 import styles from './sidebar.module.css'
 
-export default function Sidebar () {
+export default function Sidebar (props) {
+    let ongoingCards = 0, yetToStartCards = 0, expiredCards = 0, completedCards = 0;
+
+    
+    console.log(props.examData);
+    const filteredArray = props.examData.filter((item, index) => {
+        console.log(item[13]);
+        if (item[13] === 'ongoing' || item[13] === 'Start Exam'){
+            ongoingCards += 1;
+        }            
+        else if (item[13] === 'yet-to-start' || item[13] === 'Exam Allocated') {
+            yetToStartCards += 1;
+        }
+        else if (item[13] === 'expired' || item[13] === 'Exam Expired') {
+            expiredCards += 1;
+        }            
+        else if (item[13] === 'completed' || item[13] === 'Completed') {
+            completedCards += 1;
+        }
+        return index%2 === 0;
+    })
+
     return (
         <div className={styles.sidebar}>
             <div className={styles.search}><input type="text" name="" id="" placeholder="Search..." className={styles.searchbar} /></div>
@@ -12,7 +33,7 @@ export default function Sidebar () {
                             <span className={styles.colorCode} style={{backgroundColor: 'brown'}}></span>
                             All
                         </span>
-                        <span className={styles.count}>12</span>
+                        <span className={styles.count}>{filteredArray.length}</span>
                     </button>
                 </li>
                 <li>
@@ -21,7 +42,7 @@ export default function Sidebar () {
                             <span className={styles.colorCode} style={{backgroundColor: 'chocolate'}}></span>
                             Yet to Start
                         </span>
-                        <span className={styles.count}>03</span>
+                        <span className={styles.count}>{yetToStartCards}</span>
                     </button>
                 </li>
                 <li>
@@ -30,7 +51,7 @@ export default function Sidebar () {
                             <span className={styles.colorCode} style={{backgroundColor: 'lightgreen'}}></span>
                             Ongoing
                         </span>
-                        <span className={styles.count}>04</span>
+                        <span className={styles.count}>{ongoingCards}</span>
                     </button>
                 </li>
                 <li>
@@ -39,7 +60,7 @@ export default function Sidebar () {
                             <span className={styles.colorCode} style={{backgroundColor: 'darkgreen'}}></span>
                             Completed
                         </span>
-                        <span className={styles.count}>04</span>
+                        <span className={styles.count}>{completedCards}</span>
                     </button>
                 </li>
                 <li>
@@ -48,7 +69,7 @@ export default function Sidebar () {
                             <span className={styles.colorCode} style={{backgroundColor: 'red'}}></span>
                             Expired
                         </span>
-                        <span className={styles.count}>01</span>
+                        <span className={styles.count}>{expiredCards}</span>
                     </button>
                 </li>
             </ul>
