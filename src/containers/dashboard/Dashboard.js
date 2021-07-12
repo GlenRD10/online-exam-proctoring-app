@@ -62,7 +62,7 @@ export default function Dashboard (props) {
             </div>
             <div className={styles.navAndSchedule}>
                 <TopNav/>
-                <Topbar/>
+                {showLegends && <Topbar examData={examData}/>}
                 {showCards && <Schedule examData={examData}/>}
             </div>
         </div>

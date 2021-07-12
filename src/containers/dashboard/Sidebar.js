@@ -4,7 +4,6 @@ import styles from './sidebar.module.css'
 export default function Sidebar (props) {
     let ongoingCards = 0, yetToStartCards = 0, expiredCards = 0, completedCards = 0;
 
-    
     console.log(props.examData);
     const filteredArray = props.examData.filter((item, index) => {
         console.log(item[13]);
@@ -20,8 +19,8 @@ export default function Sidebar (props) {
         else if (item[13] === 'completed' || item[13] === 'Completed') {
             completedCards += 1;
         }
-        return index%2 === 0;
-    })
+        return index !== props.examData.length - 1;
+    });
 
     return (
         <div className={styles.sidebar}>

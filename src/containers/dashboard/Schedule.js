@@ -11,7 +11,7 @@ export default function Schedule (props) {
             item[13] = 'expired';
         else if (item[13] === 'Completed')
             item[13] = 'completed';
-        return index%2 === 0;
+        return index !== props.examData.length - 1;
     })
     
     return (
