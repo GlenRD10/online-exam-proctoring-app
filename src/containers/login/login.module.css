@@ -153,6 +153,11 @@ body {
   background-color: #103e94dc;
 }
 
+.captcha {
+  width: inherit;
+  text-align: center;
+}
+
 @media screen and (max-width: 1224px) {
   .login {
     width: 80%;

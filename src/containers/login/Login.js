@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import styles from "./login.module.css";
 import axios from "axios"
 
-const onChangeHandler = (value) => {
-  console.log(value);
-}
+// const onChangeHandler = (value) => {
+//   console.log(value);
+// }
 
 export default function Login () {
     const navigate = useNavigate();
@@ -62,10 +62,12 @@ export default function Login () {
                 <input type="text" name="userid" id="" placeholder="User ID" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 <input type="password" name="password" id="" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <a href="https://www.google.com">Forgot Password?</a>
-                <ReCAPTCHA
+                {/* <div className={styles.captcha}>
+                  <ReCAPTCHA
                     sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                     onChange={onChangeHandler}
-                />
+                  />
+                </div> */}
                 <button type="submit">Login</button>
             </form>
         </div>

@@ -51,9 +51,10 @@
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
     </script>
 
-    <script>
+    <!-- <script>
       document.addEventListener('keydown', function () {
         if (event.keyCode == 123) {
+          event.preventDefault();
           alert("You Can not Do This!");
           return false;
         } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
@@ -78,7 +79,7 @@
           window.event.returnValue = false;
         });
       }
-    </script>
+    </script> -->
 
 </body>
 
