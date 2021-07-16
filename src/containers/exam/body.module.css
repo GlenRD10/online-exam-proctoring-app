@@ -1,0 +1,30 @@
+.options ul {
+  list-style-type: none;
+  padding-left: 25px;
+  margin-top: 50px;
+  font-size: 1.25em;
+}
+
+.options {
+  border-top: 1px solid #b3b3b3;
+}
+
+.question {
+  padding-left: 25px;
+}
+
+.question p {
+  margin-top: 35px;
+  margin-bottom: 150px;
+}
+
+.options ul li {
+  margin-top: 30px;
+}
+
+.flag {
+  margin-left: 10%;
+  margin-top: 35px;
+  height: 30px;
+  width: 75px;
+}

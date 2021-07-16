@@ -1,0 +1,127 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: rgb(173, 177, 231);
+  width: 80%;
+  height: 85px;
+  box-shadow: 0px -10px 9px 0px rgba(0, 0, 0, 0.3);
+}
+
+.footer button {
+  height: 50px;
+  min-width: 200px;
+  transition: 0.3s;
+}
+
+.previousBtn {
+  margin: 1em;
+  border: none;
+  padding: 0.25em 1em 0.25em 3em;
+  text-align: right;
+  background: linear-gradient(
+        120deg,
+        transparent 1em,
+        #0099c3 1.05em,
+        #0099c3 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #0099c3 2.05em
+      )
+      top no-repeat,
+    linear-gradient(
+        -300deg,
+        transparent 1em,
+        #0099c3 1.05em,
+        #0099c3 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #0099c3 2.05em
+      )
+      bottom no-repeat;
+  background-size: 100% 50%;
+  color: white;
+  font-size: 1.15em;
+}
+
+.previousBtn:hover {
+  background: linear-gradient(
+        120deg,
+        transparent 1em,
+        #c30000 1.05em,
+        #c30000 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #c30000 2.05em
+      )
+      top no-repeat,
+    linear-gradient(
+        -300deg,
+        transparent 1em,
+        #c30000 1.05em,
+        #c30000 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #c30000 2.05em
+      )
+      bottom no-repeat;
+  background-size: 100% 50%;
+  color: black;
+}
+
+.nextBtn {
+  margin: 1em;
+  border: none;
+  padding: 0.25em 3em 0.25em 1em;
+  text-align: left;
+  background: linear-gradient(
+        -120deg,
+        transparent 1em,
+        #0099c3 1.05em,
+        #0099c3 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #0099c3 2.05em
+      )
+      top no-repeat,
+    linear-gradient(
+        300deg,
+        transparent 1em,
+        #0099c3 1.05em,
+        #0099c3 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #0099c3 2.05em
+      )
+      bottom no-repeat;
+  background-size: 100% 50%;
+  color: white;
+  font-size: 1.15em;
+}
+
+.nextBtn:hover {
+  background: linear-gradient(
+        -120deg,
+        transparent 1em,
+        #00c310 1.05em,
+        #00c310 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #00c310 2.05em
+      )
+      top no-repeat,
+    linear-gradient(
+        300deg,
+        transparent 1em,
+        #00c310 1.05em,
+        #00c310 1.5em,
+        transparent 1.45em,
+        transparent 2em,
+        #00c310 2.05em
+      )
+      bottom no-repeat;
+  background-size: 100% 50%;
+  color: black;
+}

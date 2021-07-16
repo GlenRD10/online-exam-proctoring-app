@@ -14,11 +14,11 @@ export default function Dashboard (props) {
     const [filter, setFilter] = useState('all');
 
     const location = useLocation();
-        let data = {
-            exam_session: 'SUMMER-2021',
-            user_id: location.state.user_id,
-            user_ses_id: location.state.session_id
-        }
+    let data = {
+        exam_session: 'SUMMER-2021',
+        user_id: location.state.user_id,
+        user_ses_id: location.state.session_id
+    }
     
 
     useEffect(() => {

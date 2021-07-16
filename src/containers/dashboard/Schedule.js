@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './schedule.module.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function Schedule (props) {
     let index=0;
@@ -21,6 +22,7 @@ export default function Schedule (props) {
     return (
         <section className={styles.schedule}>
             {filteredArray.map(data => <Card
+            examData={data}
             key={index++}
             title={data[1]}
             status={data[13]} 
@@ -41,10 +43,17 @@ const pStyle = {
 }
 
 const Card = (props) => {
+    const navigate = useNavigate();
+    console.log("printing..")
+    console.log(props.examData);
+    function examButtonHandler() {
+        navigate('/main', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id'), examData: props.examData}});
+    }
+
     let status = props.status;
     let statusTag = null;
     if (status === 'ongoing') {
-        statusTag = <div className={styles.proceedBtn}><button><i className="fa fa-play-circle"></i> Proceed</button></div>;
+        statusTag = <div className={styles.proceedBtn}><button onClick={examButtonHandler}><i className="fa fa-play-circle"></i> Proceed</button></div>;
         status = styles.ongoing;
     }
     else if (status === 'expired') {
