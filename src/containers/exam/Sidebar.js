@@ -4,10 +4,10 @@ import styles from './sidebar.module.css';
 export default function Sidebar () {
     return (
         <div className={styles.sidebar}>
-            <section className={styles.user}>
+            {/* <section className={styles.user}>
                 <i className="fa fa-user"></i>
                 <p>User Name</p>
-            </section>
+            </section> */}
             <section className={styles.nav}>
                 <button>1</button>
                 <button>2</button>
@@ -15,89 +15,6 @@ export default function Sidebar () {
                 <button>4</button>
                 <button>5</button>
                 <button>6</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
-                <button>7</button>
                 <button>7</button>
             </section>
             <section className={styles.legend}>

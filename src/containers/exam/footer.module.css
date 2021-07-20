@@ -4,7 +4,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  background-color: rgb(173, 177, 231);
+  background-color: #ced4da;
   width: 80%;
   height: 85px;
   box-shadow: 0px -10px 9px 0px rgba(0, 0, 0, 0.3);
@@ -124,4 +124,16 @@
       bottom no-repeat;
   background-size: 100% 50%;
   color: black;
+}
+
+.flag {
+  background-color: #0099c3;
+  border: none;
+  font-size: 25px;
+  background-color: rgba(90, 50, 0, 0.548);
+  color: white;
+}
+
+.flag:hover {
+  background-color: rgba(175, 96, 0, 0.548);
 }

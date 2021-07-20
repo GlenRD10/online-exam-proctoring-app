@@ -6,6 +6,7 @@ import Sidebar from './Sidebar';
 import styles from './main.module.css'
 import { useEffect , useState} from 'react';
 import { useLocation } from 'react-router';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import axios from 'axios';
 
 export default function Main () {
@@ -86,18 +87,22 @@ export default function Main () {
         }
     }
 
+    const handle = useFullScreenHandle();
+
     return (
-        <div>
-            <Navbar/>
-            <div className={styles.main}>
-                <div className={styles.bodyAndFooter}>
-                    {showBody && <Body questionList={questionList} index={index}/>}
-                    {showFooter && <Footer setIndexValue={setIndexValue}/>}
-                </div>
-                <div className={styles.sidebar}>
-                    {showSidebar && <Sidebar setIndexValue={setIndexValue}/>}
+        <FullScreen handle={handle}>
+            <div>
+                <Navbar/>
+                <div className={styles.main}>
+                    <div className={styles.bodyAndFooter}>
+                        {showBody && <Body questionList={questionList} index={index}/>}
+                        {showFooter && <Footer setIndexValue={setIndexValue}/>}
+                    </div>
+                    <div className={styles.sidebar}>
+                        {showSidebar && <Sidebar setIndexValue={setIndexValue}/>}
+                    </div>
                 </div>
             </div>
-        </div>
+        </FullScreen>
     )
 }

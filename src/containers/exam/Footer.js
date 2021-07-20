@@ -10,8 +10,9 @@ export default function Footer (props) {
 
     return (
         <footer className={styles.footer}>
-            <button onClick={BtnHandler} data-value="previous" className={styles.previousBtn}><i class="fas fa-angle-double-left"></i>Previous</button>
-            <button onClick={BtnHandler} data-value="next" className={styles.nextBtn}>Save and Next<i class="fas fa-angle-double-right"></i></button>
+            <button onClick={BtnHandler} data-value="previous" className={styles.previousBtn}><i className="fas fa-angle-double-left"></i>Previous</button>
+            <button className={styles.flag}>Review</button>
+            <button onClick={BtnHandler} data-value="next" className={styles.nextBtn}>Save and Next<i className="fas fa-angle-double-right"></i></button>
         </footer>
     )
 }

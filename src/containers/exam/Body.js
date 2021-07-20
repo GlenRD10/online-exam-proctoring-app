@@ -5,7 +5,7 @@ export default function Body (props) {
     console.log(props.questionList);
     
     return (
-        <div>
+        <div className={styles.body}>
             <section className={styles.question}>
                 <h3>Question number {props.index+1}</h3>
                 <p>{props.questionList[props.index][14]}</p>
@@ -25,7 +25,6 @@ export default function Body (props) {
                         <label htmlFor="opt4"><input type="radio" name="ans" id="opt4" />{props.questionList[props.index][18]}</label>
                     </li>
                 </ul>
-                <button className={styles.flag}>Review</button>
             </section>
         </div>
     )
