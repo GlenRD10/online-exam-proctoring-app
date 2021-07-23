@@ -97,6 +97,16 @@ export default function Main () {
 
     const handle = useFullScreenHandle();
 
+    useEffect(() => {
+        window.addEventListener('fullscreenchange', (event) => {
+            let alerted = false
+            if (!document.webkitIsFullScreen && !alerted) {
+                alert('You cannot do that!');
+                alerted = true;
+            }
+        })
+    })
+
     return (
         <FullScreen handle={handle}>
             <div onDoubleClick={handle.enter}>
