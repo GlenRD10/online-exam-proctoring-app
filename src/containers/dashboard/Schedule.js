@@ -44,8 +44,6 @@ const pStyle = {
 
 const Card = (props) => {
     const navigate = useNavigate();
-    console.log("printing..")
-    console.log(props.examData);
     function examButtonHandler() {
         navigate('/main', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id'), examData: props.examData}});
     }

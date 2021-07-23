@@ -2,9 +2,6 @@ import React from 'react';
 import styles from './body.module.css';
 
 export default function Body (props) {
-
-    console.log(props.questionList);
-
     function radioHandler(event) {
         console.log(event.target.id);
     }

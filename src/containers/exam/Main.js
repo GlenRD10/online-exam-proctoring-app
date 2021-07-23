@@ -20,7 +20,6 @@ export default function Main () {
 
     const location = useLocation();
     useEffect(() => {
-        console.log(location.state.examData[0]);
         SendPostRequest();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -75,7 +74,6 @@ export default function Main () {
     }
 
     function setIndexValue(value) {
-        console.log(index);
         if(index !== 0 && value === 'previous') {
             setIndex(index-1);
         }
@@ -101,7 +99,7 @@ export default function Main () {
 
     return (
         <FullScreen handle={handle}>
-            <div>
+            <div onDoubleClick={handle.enter}>
                 {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage}/>}
                 <div className={styles.main}>
                     <div className={styles.bodyAndFooter}>

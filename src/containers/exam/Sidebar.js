@@ -3,7 +3,6 @@ import styles from './sidebar.module.css';
 
 export default function Sidebar (props) {
     function BtnHandler(index) {
-        console.log("Button was clicked");
         props.setIndexValue(index-1);
     }
 

@@ -2,12 +2,9 @@ import React from 'react';
 import styles from './topbar.module.css';
 
 export default function Topbar (props) {
-
     let ongoingCards = 0, yetToStartCards = 0, expiredCards = 0, completedCards = 0;
 
-    console.log(props.examData);
     const filteredArray = props.examData.filter((item, index) => {
-        console.log(item[13]);
         if (item[13] === 'ongoing' || item[13] === 'Start Exam'){
             ongoingCards += 1;
         }            

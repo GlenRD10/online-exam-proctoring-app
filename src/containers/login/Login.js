@@ -4,10 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import styles from "./login.module.css";
 import axios from "axios"
 
-// const onChangeHandler = (value) => {
-//   console.log(value);
-// }
-
 export default function Login () {
     const navigate = useNavigate();
 
@@ -16,12 +12,15 @@ export default function Login () {
 
     async function handleSubmit(event) {
       event.preventDefault();
+
+      const ip = await axios.get('https://geolocation-db.com/json/')
+
       const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/online_student_login_access';
       let data = {
           exam_session: "SUMMER-2021",
           user_id: email,
           login_password: password,
-          ip: "0.0.0.0",
+          ip: ip.data.IPv4
       };
       data = Object.keys(data).map(function(key) {
           return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -40,7 +39,6 @@ export default function Login () {
         const parser = new DOMParser();
         const xml = parser.parseFromString(response.data, 'text/xml');
         const message = xml.querySelector('string').textContent.split('~');
-        console.log(message);
 
         if(message[0] === 'success') {
           localStorage.setItem('session_id', message[1]);
