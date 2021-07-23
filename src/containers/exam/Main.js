@@ -12,6 +12,8 @@ import axios from 'axios';
 export default function Main () {
     const [index, setIndex] = useState(0);
     const [questionList, setQuestionList] = useState([]);
+    const [languageChosen, setLanguageChosen] = useState('lang-1');
+    const [showNav, setShowNav] = useState(false);
     const [showBody, setShowBody] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
@@ -61,6 +63,7 @@ export default function Main () {
             const xml = parser.parseFromString(res.data, 'text/xml');
             const questionData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
             setQuestionList(questionData);
+            setShowNav(true);
             setShowBody(true);
             setShowFooter(true);
             setShowSidebar(true);
@@ -85,6 +88,13 @@ export default function Main () {
         else if(index === questionList.length-2 && value === 'next') {
             setIndex(0);
         }
+        else {
+            setIndex(value);
+        }
+    }
+
+    function setLanguage(value) {
+        setLanguageChosen(value);
     }
 
     const handle = useFullScreenHandle();
@@ -92,14 +102,14 @@ export default function Main () {
     return (
         <FullScreen handle={handle}>
             <div>
-                <Navbar/>
+                {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage}/>}
                 <div className={styles.main}>
                     <div className={styles.bodyAndFooter}>
-                        {showBody && <Body questionList={questionList} index={index}/>}
+                        {showBody && <Body questionList={questionList} index={index} languageChosen={languageChosen}/>}
                         {showFooter && <Footer setIndexValue={setIndexValue}/>}
                     </div>
                     <div className={styles.sidebar}>
-                        {showSidebar && <Sidebar setIndexValue={setIndexValue}/>}
+                        {showSidebar && <Sidebar setIndexValue={setIndexValue} questionList={questionList}/>}
                     </div>
                 </div>
             </div>
