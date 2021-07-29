@@ -91,12 +91,14 @@ export default function Main () {
         exam_id: exam_id,
         scheduler_id: scheduler_id,
         roll_number: roll_number,
-        question_id: 'Q00' +(index+1),
+        question_id: questionList[index] && questionList[index][0],
         elapsed_time_seconds: index+2,
         answer_attempt: answerValue,
         question_reviewed: 'n',
         ip: '0.0.0.0'
     }
+
+    console.log(answerData);
 
     async function saveAnswer() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';

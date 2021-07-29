@@ -18,7 +18,7 @@ export default function Body (props) {
         exam_id: props.exam_id,
         scheduler_id: props.scheduler_id,
         roll_number: props.roll_number,
-        question_id: 'Q00' + (props.index+1),
+        question_id: props.questionList[props.index] && props.questionList[props.index][0],
         ip: '0.0.0.0'
     }
 
