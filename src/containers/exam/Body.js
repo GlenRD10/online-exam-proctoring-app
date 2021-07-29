@@ -1,14 +1,74 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './body.module.css';
+import axios from 'axios';
 
 export default function Body (props) {
+
+    // const [answerValue, setAnswerValue] = useState('');
+    const [showQuestions, setShowQuestions] = useState(false);
+
+    console.log(props.index)
+
+    let data = {
+        exam_session: 'SUMMER-2021',
+        user_id: localStorage.getItem('user_id'),
+        user_ses_id: localStorage.getItem('session_id'),
+        exam_code: props.exam_code,
+        subject_code: props.subject_code,
+        exam_id: props.exam_id,
+        scheduler_id: props.scheduler_id,
+        roll_number: props.roll_number,
+        question_id: 'Q00' + (props.index+1),
+        ip: '0.0.0.0'
+    }
+
+    useEffect(() => {
+        setShowQuestions(false)
+        SendPostRequest();
+    }, [props.index]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    async function SendPostRequest() {
+        const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+        
+
+        data = Object.keys(data).map((key) => {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+        }).join('&');
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        try {
+            const res = await axios({
+                method: 'post',
+                url: url + 'student_exam_question_answer_read',                           
+                crossDomain: true,
+                data: data,
+                headers
+            });
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(res.data, 'text/xml');
+            const questionAttemptData = xml.documentElement.firstChild.data
+            console.log(questionAttemptData[0])
+            if(questionAttemptData[0] === '~') {
+                props.updateAnswerValue('');
+            } else {
+                props.updateAnswerValue(questionAttemptData[0]);
+            }
+            setShowQuestions(true);
+
+        } catch(e) {
+            console.log(e.response);
+        }
+
+    }
+
     function radioHandler(event) {
-        console.log(event.target.id);
+        props.updateAnswerValue(event.target.id)
     }
     
     return (
         <div className={styles.body}>
-            <section className={styles.question}>
+            {showQuestions && <section className={styles.question}>
                 <h3>Question number {props.index+1}</h3>
                 <p>{props.languageChosen === 'lang-1'? props.questionList[props.index][14] : props.questionList[props.index][19]}</p>
                 {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id doloribus illum inventore, rerum illo et ipsum debitis dolore optio ratione omnis architecto praesentium hic, explicabo, error ipsam magni labore. Modi.
@@ -16,20 +76,20 @@ export default function Body (props) {
                 Quis possimus saepe veniam dolor voluptatem! Deserunt hic quas aliquam fugiat ipsam alias quam assumenda porro obcaecati explicabo, sed voluptates tempore ea nulla perspiciatis iste similique corporis consequatur cumque? Similique.
                 Eius assumenda quidem fugit odit consectetur. Assumenda, tenetur! Eaque ex reprehenderit saepe itaque alias laboriosam iure laborum voluptas odit quam veritatis qui, blanditiis corrupti quo assumenda doloribus aliquam labore et.
                 Laborum saepe tempore est incidunt dolorum eaque dolorem assumenda necessitatibus rerum ratione reprehenderit in at beatae impedit magni, veritatis ducimus temporibus non sint! Neque, aspernatur iusto inventore facere deserunt rem?</p> */}
-            </section>
-            <section className={styles.options}>
+            </section>}
+            {showQuestions && <section className={styles.options}>
                 <ul onChange={radioHandler}>
                     <li>
-                        <label htmlFor="opt1"><input type="radio" name="ans" id="opt1" />{props.languageChosen === 'lang-1'? props.questionList[props.index][15] : props.questionList[props.index][20]}</label>
+                        <label htmlFor="opt1"><input type="radio" name="ans" id="a" checked={props.answerValue === 'a'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][15] : props.questionList[props.index][20]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt2"><input type="radio" name="ans" id="opt2" />{props.languageChosen === 'lang-1'? props.questionList[props.index][16] : props.questionList[props.index][21]}</label>
+                        <label htmlFor="opt2"><input type="radio" name="ans" id="b" checked={props.answerValue === 'b'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][16] : props.questionList[props.index][21]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt3"><input type="radio" name="ans" id="opt3" />{props.languageChosen === 'lang-1'? props.questionList[props.index][17] : props.questionList[props.index][22]}</label>
+                        <label htmlFor="opt3"><input type="radio" name="ans" id="c" checked={props.answerValue === 'c'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][17] : props.questionList[props.index][22]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt4"><input type="radio" name="ans" id="opt4" />{props.languageChosen === 'lang-1'? props.questionList[props.index][18] : props.questionList[props.index][23]}</label>
+                        <label htmlFor="opt4"><input type="radio" name="ans" id="d" checked={props.answerValue === 'd'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][18] : props.questionList[props.index][23]}</label>
                     </li>
                 </ul>
                 {/* <ul onChange={radioHandler}>
@@ -54,7 +114,7 @@ export default function Body (props) {
                         Voluptas quae error eaque, quibusdam aliquid quisquam? Sapiente, fugiat officiis culpa vitae odit qui sunt iusto repudiandae porro, corrupti a, tempore similique voluptatem illum! Nostrum libero inventore sequi cum dolorum?</label>
                     </li>
                 </ul> */}
-            </section>
+            </section>}
         </div>
     )
 }

@@ -19,6 +19,12 @@ export default function Main () {
     const [showFooter, setShowFooter] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
 
+    const [answerValue, setAnswerValue] = useState('');
+
+    function updateAnswerValue(value) {
+        setAnswerValue(value)
+    }
+
     const location = useLocation();
     useEffect(() => {
         SendPostRequest();
@@ -76,6 +82,51 @@ export default function Main () {
 
     }
 
+    let answerData = {
+        exam_session: 'SUMMER-2021',
+        user_id: location.state.user_id,
+        user_ses_id: location.state.session_id,
+        exam_code: exam_code,
+        subject_code: subject_code,
+        exam_id: exam_id,
+        scheduler_id: scheduler_id,
+        roll_number: roll_number,
+        question_id: 'Q00' +(index+1),
+        elapsed_time_seconds: index+2,
+        answer_attempt: answerValue,
+        question_reviewed: 'n',
+        ip: '0.0.0.0'
+    }
+
+    async function saveAnswer() {
+        const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+        
+
+        answerData = Object.keys(answerData).map((key) => {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(answerData[key]);
+        }).join('&');
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        try {
+            const res = await axios({
+                method: 'post',
+                url: url + 'student_exam_question_answer_save',                           
+                crossDomain: true,
+                data: answerData,
+                headers
+            });
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(res.data, 'text/xml');
+            const questionAttemptData = xml.documentElement.firstChild.data
+            console.log(questionAttemptData[0])
+
+        } catch(e) {
+            console.log(e.response);
+        }
+
+    }
+
     function setIndexValue(value) {
         if(index !== 0 && value === 'previous') {
             setIndex(index-1);
@@ -92,6 +143,7 @@ export default function Main () {
         else {
             setIndex(value);
         }
+        saveAnswer();
     }
 
     function setLanguage(value) {
@@ -118,7 +170,7 @@ export default function Main () {
                     {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage}/>}
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                            {showBody && <Body questionList={questionList} index={index} languageChosen={languageChosen}/>}
+                        {showBody && <Body answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
                             {showFooter && <Footer setIndexValue={setIndexValue}/>}
                         </div>
                         <div className={styles.sidebar}>

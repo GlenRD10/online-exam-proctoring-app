@@ -13,14 +13,14 @@ export default function Login () {
     async function handleSubmit(event) {
       event.preventDefault();
 
-      const ip = await axios.get('https://geolocation-db.com/json/')
+      // const ip = await axios.get('https://geolocation-db.com/json/')
 
       const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/online_student_login_access';
       let data = {
           exam_session: "SUMMER-2021",
           user_id: email,
           login_password: password,
-          ip: ip.data.IPv4
+          ip: '0.0.0.0'
       };
       data = Object.keys(data).map(function(key) {
           return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
