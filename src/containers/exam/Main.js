@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Body from './Body';
 import Sidebar from './Sidebar';
+// import Instructions from './Instructions';
 import styles from './main.module.css'
 import { useEffect , useState} from 'react';
 import { useLocation } from 'react-router';
@@ -60,7 +61,9 @@ export default function Main () {
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
+            console.log(xml);
             const questionData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
+            console.log(questionData);
             setQuestionList(questionData);
             setShowNav(true);
             setShowBody(true);
@@ -108,19 +111,22 @@ export default function Main () {
     })
 
     return (
-        <FullScreen handle={handle}>
-            <div onDoubleClick={handle.enter}>
-                {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage}/>}
-                <div className={styles.main}>
-                    <div className={styles.bodyAndFooter}>
-                        {showBody && <Body questionList={questionList} index={index} languageChosen={languageChosen}/>}
-                        {showFooter && <Footer setIndexValue={setIndexValue}/>}
-                    </div>
-                    <div className={styles.sidebar}>
-                        {showSidebar && <Sidebar setIndexValue={setIndexValue} questionList={questionList}/>}
+        <div>
+            {/* <Instructions/> */}
+            <FullScreen handle={handle}>
+                <div>
+                    {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage}/>}
+                    <div className={styles.main}>
+                        <div className={styles.bodyAndFooter}>
+                            {showBody && <Body questionList={questionList} index={index} languageChosen={languageChosen}/>}
+                            {showFooter && <Footer setIndexValue={setIndexValue}/>}
+                        </div>
+                        <div className={styles.sidebar}>
+                            {showSidebar && <Sidebar setIndexValue={setIndexValue} questionList={questionList}/>}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </FullScreen>
+            </FullScreen>
+        </div>
     )
 }
