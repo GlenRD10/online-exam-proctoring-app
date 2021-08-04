@@ -1,15 +1,16 @@
 import React from 'react';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen'
+// import { FullScreen, useFullScreenHandle } from 'react-full-screen'
+import styles from './instructions.module.css';
 
 export default function Instructions () {
-    const handle = useFullScreenHandle();
+    // const handle = useFullScreenHandle();
 
     return (
-        <div>
+        <div className={styles.container}>
             <h2>Exam Name Goes Here</h2>
-            <section>
-                <h1>Instructions</h1>
-                <ul>
+            <section className={styles.instruction}>
+                <h1><i>Instructions</i></h1>
+                <ol>
                     <li>
                         <p>Instruction 1 goes here</p>
                     </li>
@@ -22,11 +23,11 @@ export default function Instructions () {
                     <li>
                         <p>Instruction 4 goes here</p>
                     </li>
-                </ul>
+                </ol>
             </section>
-            <section>
+            <section className={styles.confirm}>
                 <label htmlFor="confirm"><input type="checkbox" name="" id="confirm" />I have read and understood the instructions</label>
-                <button onClick={handle.enter}>Continue</button>
+                <button>I am ready to begin</button>
             </section>
         </div>
     )

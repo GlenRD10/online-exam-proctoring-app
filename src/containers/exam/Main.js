@@ -162,7 +162,7 @@ export default function Main () {
                 alerted = true;
             }
         })
-    })
+    }, [] );
 
     return (
         <div>
@@ -173,7 +173,7 @@ export default function Main () {
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
                         {showBody && <Body answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer setIndexValue={setIndexValue}/>}
+                            {showFooter && <Footer setIndexValue={setIndexValue} handle={handle}/>}
                         </div>
                         <div className={styles.sidebar}>
                             {showSidebar && <Sidebar setIndexValue={setIndexValue} questionList={questionList}/>}
