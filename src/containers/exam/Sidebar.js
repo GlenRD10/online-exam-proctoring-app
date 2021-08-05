@@ -15,7 +15,7 @@ export default function Sidebar (props) {
             <section className={styles.nav}>
                 {props.questionList.map((el, index) => {
                     if(index !== 0) 
-                        return <button onClick={() => BtnHandler(index)}>{index}</button>
+                        return <button style={{backgroundColor: props.buttonColors[index-1]}}onClick={() => BtnHandler(index)}>{index}</button>
                     else 
                         return null;
                 })}

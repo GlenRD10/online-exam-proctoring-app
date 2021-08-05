@@ -7,10 +7,19 @@ export default function Footer (props) {
         props.setIndexValue(value);
     }
 
+    function reviewHandler() {
+        props.toggleReviewStatus();
+    }
+
+    function clearHandler() {
+        props.clearOptions();
+    }
+
     return (
         <footer className={styles.footer}>
             <button onClick={BtnHandler} data-value="previous" className={styles.previousBtn}><i className="fas fa-angle-double-left"></i>Previous</button>
-            <button className={styles.flag} onClick={props.handle.enter}>Review</button>
+            <button onClick={clearHandler} className={styles.flag}>Clear</button>
+            <button className={styles.flag} onClick={reviewHandler}>{props.reviewStatus ? 'Reviewed' : 'Review'}</button>
             <button onClick={BtnHandler} data-value="next" className={styles.nextBtn}>Save and Next<i className="fas fa-angle-double-right"></i></button>
         </footer>
     )

@@ -23,7 +23,8 @@ export default function Body (props) {
     }
 
     useEffect(() => {
-        setShowQuestions(false)
+        props.setFooterFun(false);
+        setShowQuestions(false);
         SendPostRequest();
     }, [props.index]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -48,13 +49,26 @@ export default function Body (props) {
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
             const questionAttemptData = xml.documentElement.firstChild.data
-            console.log(questionAttemptData[0])
+            console.log(questionAttemptData)
             if(questionAttemptData[0] === '~') {
+                if(questionAttemptData[1] === 'y') {
+                    props.setReviewStatusFun(true);
+                }
+                else {
+                    props.setReviewStatusFun(false);
+                }
                 props.updateAnswerValue('');
             } else {
+                if(questionAttemptData[2] === 'y') {
+                    props.setReviewStatusFun(true);
+                }
+                else {
+                    props.setReviewStatusFun(false);
+                }
                 props.updateAnswerValue(questionAttemptData[0]);
             }
             setShowQuestions(true);
+            props.setFooterFun(true);
 
         } catch(e) {
             console.log(e.response);

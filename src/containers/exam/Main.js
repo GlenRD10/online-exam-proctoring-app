@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Body from './Body';
 import Sidebar from './Sidebar';
-// import Instructions from './Instructions';
+import Instructions from './Instructions';
 import styles from './main.module.css'
 import { useEffect , useState} from 'react';
 import { useLocation } from 'react-router';
@@ -19,7 +19,13 @@ export default function Main () {
     const [showFooter, setShowFooter] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
 
+    const [showDiv, setShowDiv] = useState(false);
+    const [showInstructions, setShowInstructions] = useState(true);
+
+
     const [answerValue, setAnswerValue] = useState('');
+    const [reviewStatus, setReviewStatus] = useState(false);
+    const [buttonColors, setButtonColors] = useState([]);
 
     function updateAnswerValue(value) {
         setAnswerValue(value)
@@ -70,6 +76,70 @@ export default function Main () {
             console.log(xml);
             const questionData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
             console.log(questionData);
+            
+            let btnColors = [];
+
+            for (let i=0; i<questionData.length-1; i++) {
+
+
+                let data = {
+                    exam_session: 'SUMMER-2021',
+                    user_id: localStorage.getItem('user_id'),
+                    user_ses_id: localStorage.getItem('session_id'),
+                    exam_code: exam_code,
+                    subject_code: subject_code,
+                    exam_id: exam_id,
+                    scheduler_id: scheduler_id,
+                    roll_number: roll_number,
+                    question_id: questionData[i][0],
+                    ip: '0.0.0.0'
+                }
+
+                const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+        
+
+                data = Object.keys(data).map((key) => {
+                    return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+                }).join('&');
+                const headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+                try {
+                    const res = await axios({
+                        method: 'post',
+                        url: url + 'student_exam_question_answer_read',                           
+                        crossDomain: true,
+                        data: data,
+                        headers
+                    });
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(res.data, 'text/xml');
+                    const questionAttemptData = xml.documentElement.firstChild.data
+
+                    if(questionAttemptData[0] === '~') {
+                        if(questionAttemptData[1] === 'y') {
+                            btnColors.push('brown');
+                        }
+                        else {
+                            btnColors.push('#9ad1d4');
+                        }
+                    } else {
+                        if(questionAttemptData[2] === 'y') {
+                            btnColors.push('orange');
+                        } else {
+                            btnColors.push('green');
+                        }
+                    }
+                    
+
+                } catch(e) {
+                    console.log(e.response);
+                }
+
+            }
+            setButtonColors(btnColors);
+            console.log(buttonColors);
+
             setQuestionList(questionData);
             setShowNav(true);
             setShowBody(true);
@@ -80,6 +150,10 @@ export default function Main () {
             console.log(e.response);
         }
 
+    }
+
+    function setFooterFun(value) {
+        setShowFooter(value);
     }
 
     let answerData = {
@@ -94,11 +168,9 @@ export default function Main () {
         question_id: questionList[index] && questionList[index][0],
         elapsed_time_seconds: index+2,
         answer_attempt: answerValue,
-        question_reviewed: 'n',
+        question_reviewed: reviewStatus ? 'y' : 'n',
         ip: '0.0.0.0'
     }
-
-    console.log(answerData);
 
     async function saveAnswer() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
@@ -152,6 +224,17 @@ export default function Main () {
         setLanguageChosen(value);
     }
 
+    function toggleReviewStatus() {
+        reviewStatus ? setReviewStatus(false) : setReviewStatus(true);
+    }
+    function setReviewStatusFun(value) {
+        setReviewStatus(value);
+    }
+
+    function clearOptions() {
+        setAnswerValue('');
+    }
+
     const handle = useFullScreenHandle();
 
     useEffect(() => {
@@ -166,20 +249,20 @@ export default function Main () {
 
     return (
         <div>
-            {/* <Instructions/> */}
+            {showInstructions && <Instructions setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} />}
             <FullScreen handle={handle}>
-                <div>
+                {showDiv && <div>
                     {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage}/>}
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer setIndexValue={setIndexValue} handle={handle}/>}
+                        {showBody && <Body setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                            {showFooter && <Footer clearOptions={clearOptions} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={styles.sidebar}>
-                            {showSidebar && <Sidebar setIndexValue={setIndexValue} questionList={questionList}/>}
+                            {showSidebar && <Sidebar buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
                         </div>
                     </div>
-                </div>
+                </div>}
             </FullScreen>
         </div>
     )

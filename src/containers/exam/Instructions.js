@@ -2,8 +2,14 @@ import React from 'react';
 // import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import styles from './instructions.module.css';
 
-export default function Instructions () {
+export default function Instructions (props) {
     // const handle = useFullScreenHandle();
+
+    const btnHandler = () => {
+        props.setShowDiv(true);
+        props.setShowInstructions(false);
+        props.handle.enter();
+   }
 
     return (
         <div className={styles.container}>
@@ -27,7 +33,7 @@ export default function Instructions () {
             </section>
             <section className={styles.confirm}>
                 <label htmlFor="confirm"><input type="checkbox" name="" id="confirm" />I have read and understood the instructions</label>
-                <button>I am ready to begin</button>
+                <button onClick={btnHandler}>I am ready to begin</button>
             </section>
         </div>
     )
