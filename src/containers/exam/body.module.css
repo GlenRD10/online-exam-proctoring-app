@@ -20,6 +20,7 @@
   padding-left: 25px;
   padding-right: 25px;
   height: 275px;
+  overflow: auto;
 }
 
 .question p {

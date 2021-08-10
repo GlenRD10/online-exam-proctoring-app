@@ -7,7 +7,7 @@ export default function Body (props) {
     // const [answerValue, setAnswerValue] = useState('');
     const [showQuestions, setShowQuestions] = useState(false);
 
-    console.log(props.index)
+    // console.log(props.index)
 
     let data = {
         exam_session: 'SUMMER-2021',
@@ -79,17 +79,15 @@ export default function Body (props) {
     function radioHandler(event) {
         props.updateAnswerValue(event.target.id)
     }
+
+    let img1 = Buffer.from(props.questionList[props.index][24], "base64").toString();
+    // let img2 = Buffer.from(props.questionList[props.index][25], "base64").toString();
     
     return (
         <div className={styles.body}>
             {showQuestions && <section className={styles.question}>
                 <h3>Question number {props.index+1}</h3>
-                <p>{props.languageChosen === 'lang-1'? props.questionList[props.index][14] : props.questionList[props.index][19]}</p>
-                {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id doloribus illum inventore, rerum illo et ipsum debitis dolore optio ratione omnis architecto praesentium hic, explicabo, error ipsam magni labore. Modi.
-                Neque architecto impedit incidunt recusandae consequuntur expedita, mollitia, voluptas itaque ea rem sint nesciunt quis. Eligendi aliquid nemo deserunt nobis quam odit id quae officia possimus adipisci, error consectetur perferendis.
-                Quis possimus saepe veniam dolor voluptatem! Deserunt hic quas aliquam fugiat ipsam alias quam assumenda porro obcaecati explicabo, sed voluptates tempore ea nulla perspiciatis iste similique corporis consequatur cumque? Similique.
-                Eius assumenda quidem fugit odit consectetur. Assumenda, tenetur! Eaque ex reprehenderit saepe itaque alias laboriosam iure laborum voluptas odit quam veritatis qui, blanditiis corrupti quo assumenda doloribus aliquam labore et.
-                Laborum saepe tempore est incidunt dolorum eaque dolorem assumenda necessitatibus rerum ratione reprehenderit in at beatae impedit magni, veritatis ducimus temporibus non sint! Neque, aspernatur iusto inventore facere deserunt rem?</p> */}
+                <p>{props.languageChosen === 'lang-1'? props.questionList[props.index][14] : props.questionList[props.index][19]}<img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt="" /></p>
             </section>}
             {showQuestions && <section className={styles.options}>
                 <ul onChange={radioHandler}>
