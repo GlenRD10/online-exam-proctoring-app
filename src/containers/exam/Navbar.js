@@ -26,7 +26,7 @@ export default function Nabvar (props) {
             </section>
             <section className={styles.clock}>
                 <i className="fas fa-user-clock"></i>
-                <p>00:59:46</p>
+                <p>{props.timer}</p>
             </section>
         </nav>
     )

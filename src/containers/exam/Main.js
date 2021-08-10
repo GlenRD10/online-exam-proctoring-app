@@ -14,6 +14,7 @@ export default function Main () {
     const [index, setIndex] = useState(0);
     const [questionList, setQuestionList] = useState([]);
     const [languageChosen, setLanguageChosen] = useState('lang-1');
+    const [timer, setTimer] = useState('02:00:00')
     const [showNav, setShowNav] = useState(false);
     const [showBody, setShowBody] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
@@ -21,7 +22,6 @@ export default function Main () {
 
     const [showDiv, setShowDiv] = useState(false);
     const [showInstructions, setShowInstructions] = useState(true);
-
 
     const [answerValue, setAnswerValue] = useState('');
     const [reviewStatus, setReviewStatus] = useState(false);
@@ -247,12 +247,43 @@ export default function Main () {
         })
     }, [] );
 
+    const countDown = (remTime) => {
+        let interval = setInterval(() => {
+            if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
+                clearInterval(interval);
+            } else {
+                if (remTime.sec > 0) remTime.sec -= 1;
+                else {
+                    remTime.sec = 59;
+                    if (remTime.min > 0) remTime.min -= 1;
+                    else {
+                        remTime.min = 59;
+                        remTime.hr -= 1;
+                    }
+                }
+
+                var hr = "", min = "", sec = "";
+                if (remTime.hr > 9) hr = String(remTime.hr);
+                else hr = "0" + String(remTime.hr);
+                if (remTime.min > 9) min = String(remTime.min);
+                else min = "0" + String(remTime.min);
+                if (remTime.sec > 9) sec = String(remTime.sec);
+                else sec = "0" + String(remTime.sec);
+                setTimer(hr + ":" + min + ":" + sec);
+            }
+        }, 1000)
+    }
+
+    useEffect(() => {
+        countDown({hr: 2, min: 0, sec: 0});
+    }, []);
+
     return (
         <div>
             {showInstructions && <Instructions setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
-                    {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage}/>}
+                    {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
                         {showBody && <Body setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
