@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import publicIp from "public-ip";
 // import ReCAPTCHA from "react-google-recaptcha";
 import styles from "./login.module.css";
 import axios from "axios"
@@ -14,13 +15,14 @@ export default function Login () {
       event.preventDefault();
 
       // const ip = await axios.get('https://geolocation-db.com/json/')
+      const ipv4 = await publicIp.v4();
 
       const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/online_student_login_access';
       let data = {
           exam_session: "SUMMER-2021",
           user_id: email,
           login_password: password,
-          ip: '0.0.0.0'
+          ip: ipv4
       };
       data = Object.keys(data).map(function(key) {
           return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -44,6 +46,7 @@ export default function Login () {
           localStorage.setItem('session_id', message[1]);
           localStorage.setItem('user_name', message[2]);
           localStorage.setItem('user_id', message[3]);
+          localStorage.setItem('ipv4', ipv4);
           navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
         }
         else {

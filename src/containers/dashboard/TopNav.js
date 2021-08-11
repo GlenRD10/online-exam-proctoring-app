@@ -1,5 +1,5 @@
 import React from 'react';
-import menu_icon from './menu.png';
+// import menu_icon from './menu.png';
 import profile_image from './man.png'
 import styles from './topnav.module.css'
 
@@ -16,7 +16,8 @@ export default function TopNav () {
                     <p>{email}</p>
                 </section>
             </div>
-            <img src={menu_icon} alt="" className={styles.dropdown} />
+            {/* <img src={menu_icon} alt="" className={styles.dropdown} /> */}
+            <button className={styles.logoutBtn}><i className="fas fa-sign-out-alt"></i> Logout</button>
         </nav>
     )
 }
