@@ -6,9 +6,11 @@ export default function Instructions (props) {
     // const handle = useFullScreenHandle();
 
     const btnHandler = () => {
+        // exam start code goes here
         props.setShowDiv(true);
         props.setShowInstructions(false);
         props.handle.enter();
+        props.countDown({hr: 2, min: 0, sec: 0})
    }
 
     return (

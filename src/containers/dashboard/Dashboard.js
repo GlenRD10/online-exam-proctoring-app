@@ -46,6 +46,7 @@ export default function Dashboard (props) {
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
             const exams = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
+            console.log(exams);
             setExamData(exams);
             setShowCards(true);
             setShowLegends(true);

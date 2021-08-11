@@ -251,6 +251,7 @@ export default function Main () {
         let interval = setInterval(() => {
             if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
                 clearInterval(interval);
+                // exam end code goes here
             } else {
                 if (remTime.sec > 0) remTime.sec -= 1;
                 else {
@@ -274,13 +275,13 @@ export default function Main () {
         }, 1000)
     }
 
-    useEffect(() => {
-        countDown({hr: 2, min: 0, sec: 0});
-    }, []);
+    // useEffect(() => {
+    //     countDown({hr: 2, min: 0, sec: 0});
+    // }, []);
 
     return (
         <div>
-            {showInstructions && <Instructions setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} />}
+            {showInstructions && <Instructions setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
                     {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
