@@ -15,7 +15,7 @@ export default function Main () {
     const [questionList, setQuestionList] = useState([]);
     const [languageChosen, setLanguageChosen] = useState('lang-1');
     const [timer, setTimer] = useState('02:00:00')
-    // const [elapsedTime, setElapsedTime] = useState(0)
+    const [elapsedTime, setElapsedTime] = useState(0)
     const [showNav, setShowNav] = useState(false);
     const [showBody, setShowBody] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
@@ -180,6 +180,8 @@ export default function Main () {
     }
 
     async function saveAnswer() {
+
+        console.log(elapsedTime);
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
 
@@ -307,7 +309,7 @@ export default function Main () {
                     {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                        {showBody && <Body setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
                             {showFooter && <Footer clearOptions={clearOptions} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={styles.sidebar}>

@@ -15,6 +15,7 @@ export default function Instructions (props) {
         exam_id: props.exam_id,
         scheduler_id: props.scheduler_id,
         roll_number: props.roll_number,
+        ip: '0.0.0.0'
     }
 
     const btnHandler = () => {

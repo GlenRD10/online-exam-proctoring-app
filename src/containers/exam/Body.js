@@ -42,6 +42,18 @@ export default function Body (props) {
     //     }, 1000)
     // }
 
+    useEffect(() => {
+        let elapsedTime = 0;
+        const interval = setInterval(() => {
+            console.log(elapsedTime);
+            elapsedTime++;
+        }, 1000);
+        return () => {
+            props.setElapsedTime(elapsedTime);
+            clearInterval(interval);
+        };
+    }, [props.index]); // eslint-disable-line react-hooks/exhaustive-deps
+
     async function SendPostRequest() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
