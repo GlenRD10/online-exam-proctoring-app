@@ -15,6 +15,7 @@ export default function Main () {
     const [questionList, setQuestionList] = useState([]);
     const [languageChosen, setLanguageChosen] = useState('lang-1');
     const [timer, setTimer] = useState('02:00:00')
+    // const [elapsedTime, setElapsedTime] = useState(0)
     const [showNav, setShowNav] = useState(false);
     const [showBody, setShowBody] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
@@ -26,6 +27,7 @@ export default function Main () {
     const [answerValue, setAnswerValue] = useState('');
     const [reviewStatus, setReviewStatus] = useState(false);
     const [buttonColors, setButtonColors] = useState([]);
+    const [legendCtn, setLegendCtn] = useState([]);
 
     function updateAnswerValue(value) {
         setAnswerValue(value)
@@ -78,6 +80,7 @@ export default function Main () {
             console.log(questionData);
             
             let btnColors = [];
+            let legendCount = [0,0,0,0];
 
             for (let i=0; i<questionData.length-1; i++) {
 
@@ -119,15 +122,19 @@ export default function Main () {
                     if(questionAttemptData[0] === '~') {
                         if(questionAttemptData[1] === 'y') {
                             btnColors.push('brown');
+                            legendCount[3] += 1;
                         }
                         else {
                             btnColors.push('#9ad1d4');
+                            legendCount[1] += 1;
                         }
                     } else {
                         if(questionAttemptData[2] === 'y') {
                             btnColors.push('orange');
+                            legendCount[2] += 1;
                         } else {
                             btnColors.push('green');
+                            legendCount[0] += 1;
                         }
                     }
                     
@@ -138,7 +145,7 @@ export default function Main () {
 
             }
             setButtonColors(btnColors);
-            console.log(buttonColors);
+            setLegendCtn(legendCount);
 
             setQuestionList(questionData);
             setShowNav(true);
@@ -166,7 +173,7 @@ export default function Main () {
         scheduler_id: scheduler_id,
         roll_number: roll_number,
         question_id: questionList[index] && questionList[index][0],
-        elapsed_time_seconds: index+2,
+        elapsed_time_seconds: 5,
         answer_attempt: answerValue,
         question_reviewed: reviewStatus ? 'y' : 'n',
         ip: '0.0.0.0'
@@ -202,6 +209,23 @@ export default function Main () {
     }
 
     function setIndexValue(value) {
+        let tempArray = buttonColors;
+        // let tempcount = legendCtn;
+
+        if(reviewStatus && answerValue !== '') {
+            //Update array for color yellow
+            tempArray[index] = 'orange'
+        } else if(reviewStatus && answerValue === '') {
+            //Update array for color red
+            tempArray[index] = 'brown'
+        } else if(!reviewStatus && answerValue !== '') {
+            //Update array for color green
+            tempArray[index] = 'green'
+        } else {
+            //Update array for blue
+            tempArray[index] = '#9ad1d4'
+        }
+
         if(index !== 0 && value === 'previous') {
             setIndex(index-1);
         }
@@ -275,13 +299,9 @@ export default function Main () {
         }, 1000)
     }
 
-    // useEffect(() => {
-    //     countDown({hr: 2, min: 0, sec: 0});
-    // }, []);
-
     return (
         <div>
-            {showInstructions && <Instructions setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} />}
+            {showInstructions && <Instructions data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
                     {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
@@ -291,7 +311,7 @@ export default function Main () {
                             {showFooter && <Footer clearOptions={clearOptions} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={styles.sidebar}>
-                            {showSidebar && <Sidebar buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
+                            {showSidebar && <Sidebar legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
                         </div>
                     </div>
                 </div>}

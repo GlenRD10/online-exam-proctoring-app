@@ -23,10 +23,10 @@ export default function Sidebar (props) {
             <section className={styles.legend}>
                 <h4>Overall Summary</h4>
                 <ul>
-                    <li><span style={{backgroundColor: 'green'}}>0</span> Attempted</li>
-                    <li><span style={{backgroundColor: '#9ad1d4'}}>0</span> Not Attempted</li>
-                    <li><span style={{backgroundColor: 'orange'}}>0</span> Attempted and Review</li>
-                    <li><span style={{backgroundColor: 'brown'}}>0</span> Not Attempted and Review</li>
+                    <li><span style={{backgroundColor: 'green'}}>{props.legendCtn[0]}</span> Attempted</li>
+                    <li><span style={{backgroundColor: '#9ad1d4'}}>{props.legendCtn[1]}</span> Not Attempted</li>
+                    <li><span style={{backgroundColor: 'orange'}}>{props.legendCtn[2]}</span> Attempted and Review</li>
+                    <li><span style={{backgroundColor: 'brown'}}>{props.legendCtn[3]}</span> Not Attempted and Review</li>
                 </ul>
             </section>
         </div>

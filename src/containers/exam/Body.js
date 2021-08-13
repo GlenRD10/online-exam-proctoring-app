@@ -19,14 +19,28 @@ export default function Body (props) {
         scheduler_id: props.scheduler_id,
         roll_number: props.roll_number,
         question_id: props.questionList[props.index] && props.questionList[props.index][0],
-        ip: '0.0.0.0'
+        ip: localStorage.getItem('ipv4'),
     }
 
     useEffect(() => {
+        // props.elapsedTime = 0;
+        // console.log(props.elapsedTime);
+        // console.log("before true");
+        // elapsedTimer(true);
+
         props.setFooterFun(false);
         setShowQuestions(false);
         SendPostRequest();
     }, [props.index]); // eslint-disable-line react-hooks/exhaustive-deps
+    
+    // const elapsedTimer = (flag) => {
+    //     let interval = setInterval(() => {
+    //         props.elapsedTime += 1;
+    //         if(!flag) {
+    //             clearInterval(interval);
+    //         }
+    //     }, 1000)
+    // }
 
     async function SendPostRequest() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
