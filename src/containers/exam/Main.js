@@ -11,10 +11,25 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import axios from 'axios';
 
 export default function Main () {
+
+    const location = useLocation();
+    const time_remaining = location.state.examData[12];
+
+    let hr = Math.trunc(time_remaining / 3600);
+    let min = Math.trunc((time_remaining % 3600) / 60);
+    let sec = Math.trunc(time_remaining % 60)
+
+    if (hr > 9) hr = String(hr);
+    else hr = "0" + String(hr);
+    if (min > 9) min = String(min);
+    else min = "0" + String(min);
+    if (sec > 9) sec = String(sec);
+    else sec = "0" + String(sec);
+
     const [index, setIndex] = useState(0);
     const [questionList, setQuestionList] = useState([]);
     
-    const [timer, setTimer] = useState('02:00:00')
+    const [timer, setTimer] = useState(hr + ':' + min + ':' + sec);
     const [elapsedTime, setElapsedTime] = useState(0)
     const [showNav, setShowNav] = useState(false);
     const [showBody, setShowBody] = useState(false);
@@ -36,11 +51,16 @@ export default function Main () {
     const [languageChosen, setLanguageChosen] = useState(primaryLang !== '' ? primaryLang : '');
     const [allowReview, setAllowReview] = useState(false);
 
+    const [sidebarVisibility, setsidebarVisibility] = useState({ display: '' })
+
+    // if (window.screen.width < 768) {
+    //     setsidebarVisibility({ display: 'none' })
+    // }
+
     function updateAnswerValue(value) {
         setAnswerValue(value)
     }
 
-    const location = useLocation();
     useEffect(() => {
         SendPostRequest();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -319,16 +339,16 @@ export default function Main () {
 
     return (
         <div>
-            {showInstructions && <Instructions setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} />}
+            {showInstructions && <Instructions setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
                     {showNav && <Navbar allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body primaryLang={primaryLang} setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                        {showBody && <Body sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} primaryLang={primaryLang} setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
                             {showFooter && <Footer clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
-                        <div className={styles.sidebar}>
+                        <div className={styles.sidebar} style={sidebarVisibility}>
                             {showSidebar && <Sidebar allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
                         </div>
                     </div>

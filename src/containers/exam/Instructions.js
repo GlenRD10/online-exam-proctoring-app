@@ -7,6 +7,12 @@ export default function Instructions (props) {
     const [settingsData, setSettingsData] = useState([]);
     const [showInstructions, setShowInstructions] = useState(false);
     // const handle = useFullScreenHandle();
+    const [checkBox, setCheckBox] = useState(false);
+
+    function checkBoxStatus() {
+        setCheckBox(true);
+        console.log(checkBox);
+    }
 
     let data = {
         exam_session: props.data.exam_session,
@@ -26,7 +32,10 @@ export default function Instructions (props) {
         props.setShowDiv(true);
         props.setShowInstructions(false);
         props.handle.enter();
-        props.countDown({hr: 2, min: 0, sec: 0})
+        let hr = Math.trunc(props.timeRemaining / 3600);
+        let min = Math.trunc((props.timeRemaining % 3600) / 60);
+        let sec = Math.trunc(props.timeRemaining % 60)
+        props.countDown({hr, min, sec})
    }
 
    async function startExam() {
@@ -116,8 +125,8 @@ export default function Instructions (props) {
                 {showInstructions && <div dangerouslySetInnerHTML={{__html: settingsData[0][26]}} />}
             </section>
             <section className={styles.confirm}>
-                <label htmlFor="confirm"><input type="checkbox" name="" id="confirm" />I have read and understood the instructions</label>
-                <button onClick={btnHandler}>I am ready to begin</button>
+                <label htmlFor="confirm"><input type="checkbox" onChange={checkBoxStatus} name="" id="confirm" />I have read and understood the instructions</label>
+                {checkBox && <button onClick={btnHandler}>I am ready to begin</button>}
             </section>
         </div>
     )

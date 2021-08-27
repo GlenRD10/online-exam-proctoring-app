@@ -76,7 +76,7 @@ const Card = (props) => {
                 <p>Time Zone:{props.timezone}</p>
                 <p>Number of Questions:{props.questions}</p>
                 <p>Test Duration:{props.duration}</p>
-                <p>Time Remaining:{props.timeRemaining}</p>
+                <p>Time Remaining:{Math.round(props.timeRemaining * 100 / 60) / 100}</p>
             </div>
             <span className={styles.fadeEffect}></span>
             {statusTag}
