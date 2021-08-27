@@ -107,27 +107,29 @@ export default function Body (props) {
     }
 
     let img1 = Buffer.from(props.questionList[props.index][24], "base64").toString();
+    console.log(props.languageChosen)
+    console.log(props.primaryLang)
     // let img2 = Buffer.from(props.questionList[props.index][25], "base64").toString();
     
     return (
         <div className={styles.body}>
             {showQuestions && <section className={styles.question}>
                 <h3>Question number {props.index+1}</h3>
-                <p>{props.languageChosen === 'lang-1'? props.questionList[props.index][14] : props.questionList[props.index][19]}<img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt="" /></p>
+                <p>{props.languageChosen === props.primaryLang ? props.questionList[props.index][14] : props.questionList[props.index][19]}<img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt="" /></p>
             </section>}
             {showQuestions && <section className={styles.options}>
                 <ul onChange={radioHandler}>
                     <li>
-                        <label htmlFor="opt1"><input type="radio" name="ans" id="a" checked={props.answerValue === 'a'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][15] : props.questionList[props.index][20]}</label>
+                        <label htmlFor="opt1"><input type="radio" name="ans" id="a" checked={props.answerValue === 'a'} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][15] : props.questionList[props.index][20]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt2"><input type="radio" name="ans" id="b" checked={props.answerValue === 'b'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][16] : props.questionList[props.index][21]}</label>
+                        <label htmlFor="opt2"><input type="radio" name="ans" id="b" checked={props.answerValue === 'b'} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][16] : props.questionList[props.index][21]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt3"><input type="radio" name="ans" id="c" checked={props.answerValue === 'c'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][17] : props.questionList[props.index][22]}</label>
+                        <label htmlFor="opt3"><input type="radio" name="ans" id="c" checked={props.answerValue === 'c'} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][17] : props.questionList[props.index][22]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt4"><input type="radio" name="ans" id="d" checked={props.answerValue === 'd'} />{props.languageChosen === 'lang-1'? props.questionList[props.index][18] : props.questionList[props.index][23]}</label>
+                        <label htmlFor="opt4"><input type="radio" name="ans" id="d" checked={props.answerValue === 'd'} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][18] : props.questionList[props.index][23]}</label>
                     </li>
                 </ul>
                 {/* <ul onChange={radioHandler}>

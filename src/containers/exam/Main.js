@@ -13,7 +13,7 @@ import axios from 'axios';
 export default function Main () {
     const [index, setIndex] = useState(0);
     const [questionList, setQuestionList] = useState([]);
-    const [languageChosen, setLanguageChosen] = useState('lang-1');
+    
     const [timer, setTimer] = useState('02:00:00')
     const [elapsedTime, setElapsedTime] = useState(0)
     const [showNav, setShowNav] = useState(false);
@@ -28,6 +28,13 @@ export default function Main () {
     const [reviewStatus, setReviewStatus] = useState(false);
     const [buttonColors, setButtonColors] = useState([]);
     const [legendCtn, setLegendCtn] = useState([]);
+
+    //Settings Parameters 
+    const[allowMultiLang, setAllowMultiLang] = useState(false);
+    const[primaryLang, setPrimaryLang] = useState('');
+    const[secondaryLang, setSecondaryLang] = useState('');
+    const [languageChosen, setLanguageChosen] = useState(primaryLang !== '' ? primaryLang : '');
+    const [allowReview, setAllowReview] = useState(false);
 
     function updateAnswerValue(value) {
         setAnswerValue(value)
@@ -95,7 +102,7 @@ export default function Main () {
                     scheduler_id: scheduler_id,
                     roll_number: roll_number,
                     question_id: questionData[i][0],
-                    ip: '0.0.0.0'
+                    ip: localStorage.getItem('ipv4')
                 }
 
                 const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
@@ -176,7 +183,7 @@ export default function Main () {
         elapsed_time_seconds: 5,
         answer_attempt: answerValue,
         question_reviewed: reviewStatus ? 'y' : 'n',
-        ip: '0.0.0.0'
+        ip: localStorage.getItem('ipv4')
     }
 
     async function saveAnswer() {
@@ -212,7 +219,7 @@ export default function Main () {
 
     function setIndexValue(value) {
         let tempArray = buttonColors;
-        // let tempcount = legendCtn;
+        let tempcount = [0,0,0,0];
 
         if(reviewStatus && answerValue !== '') {
             //Update array for color yellow
@@ -227,6 +234,15 @@ export default function Main () {
             //Update array for blue
             tempArray[index] = '#9ad1d4'
         }
+
+        tempArray.forEach((v,i) => {
+            if(v === 'green') tempcount[0] += 1;
+            else if(v === 'orange') tempcount[2] += 1;
+            else if(v === 'brown') tempcount[3] += 1;
+            else tempcount[1] += 1;
+        });
+
+        setLegendCtn(tempcount);
 
         if(index !== 0 && value === 'previous') {
             setIndex(index-1);
@@ -303,17 +319,17 @@ export default function Main () {
 
     return (
         <div>
-            {showInstructions && <Instructions data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} />}
+            {showInstructions && <Instructions setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
-                    {showNav && <Navbar languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
+                    {showNav && <Navbar allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer clearOptions={clearOptions} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                        {showBody && <Body primaryLang={primaryLang} setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                            {showFooter && <Footer clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={styles.sidebar}>
-                            {showSidebar && <Sidebar legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
+                            {showSidebar && <Sidebar allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
                         </div>
                     </div>
                 </div>}

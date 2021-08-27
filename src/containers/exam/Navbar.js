@@ -14,15 +14,15 @@ export default function Nabvar (props) {
                 <p>SECOND SEMESTER BACHELOR OF ARTS (B.A.) (CBCS PATTERN)</p>
             </section>
             <section className={styles.language}>
-                <p>Language:</p>
-                <span onChange={radioHandler} >
+                <p>Language: {props.allowMultiLang ? '' : props.primaryLang}</p>
+                {props.allowMultiLang && <span onChange={radioHandler} >
                     {/* <label htmlFor="lang1">Lang1</label>
                     <input type="radio" name="lang" id="lang1" checked style={{marginRight: '12px'}} /> */}
-                    <label htmlFor="lang-1"><input type="radio" name="lang" id="lang-1"/>Lang-1</label>
+                    <label htmlFor="lang-1"><input type="radio" name="lang" id={props.primaryLang}/>{props.primaryLang}</label>
                     {/* <label htmlFor="lang2">Lang2</label>
                     <input type="radio" name="lang" id="lang2" /> */}
-                    <label htmlFor="lang-2"><input type="radio" name="lang" id="lang-2"/>Lang-2</label>
-                </span>
+                    <label htmlFor="lang-2"><input type="radio" name="lang" id={props.secondaryLang}/>{props.secondaryLang}</label>
+                </span>}
             </section>
             <section className={styles.clock}>
                 <i className="fas fa-user-clock"></i>

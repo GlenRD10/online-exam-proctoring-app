@@ -67,7 +67,7 @@ export default function Dashboard (props) {
                 {showLegends && <Sidebar examData={examData} setFilterFunction={setFilterFunction}/>}
             </div>
             <div className={styles.navAndSchedule}>
-                <TopNav/>
+                <TopNav data={data}/>
                 {showLegends && <Topbar examData={examData} setFilterFunction={setFilterFunction}/>}
                 {showCards && <Schedule examData={examData} filter={filter}/>}
             </div>
