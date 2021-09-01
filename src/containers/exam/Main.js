@@ -357,7 +357,7 @@ export default function Main () {
             <FullScreen handle={handle}>
                 {showDiv && <div>
                     {showNav && <Navbar reminderStatus={reminderStatus} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
-                    <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} />
+                    <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage}/>
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
                         {showBody && <Body questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
