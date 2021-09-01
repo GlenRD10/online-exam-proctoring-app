@@ -2,6 +2,11 @@ import React from 'react';
 import styles from './navbar.module.css';
 
 export default function Nabvar (props) {
+    let reminderStyle = {};
+    if(props.reminderStatus) {
+        reminderStyle = {color: 'brown', fontWeight: 'bold'};
+    }
+
     function radioHandler(event) {
         console.log(event.target.id);
         props.setLanguage(event.target.id);
@@ -26,7 +31,7 @@ export default function Nabvar (props) {
             </section>
             <section className={styles.clock}>
                 <i className="fas fa-user-clock"></i>
-                <p>{props.timer}</p>
+                <p style={reminderStyle}>{props.timer}</p>
             </section>
         </nav>
     )

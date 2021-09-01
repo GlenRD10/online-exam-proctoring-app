@@ -107,10 +107,16 @@ export default function Instructions (props) {
             setShowInstructions(true);
             console.log(backendData);
             props.setAllowReview(backendData[0][0] === 'y' ? true : false);
-            props.setAllowMultiLang(backendData[0][13] === 'y' ? true : false)
+            props.setAllowMultiLang(backendData[0][13] === 'y' ? true : false);
+            props.setAllowNavigation(backendData[0][10] === 'n' ? false : true);
             props.setPrimaryLang(backendData[0][14]);
             props.setSecondaryLang(backendData[0][15]);
             props.setLanguageChosen(backendData[0][14]);
+            props.setReminder(backendData[0][21]);
+            if(backendData[0][5]) {
+                props.setSeperateTimer(true);
+                props.setSeperateTimerInSeconds(backendData[0][6]);
+            }
 
         } catch(e) {
             console.log(e.response);

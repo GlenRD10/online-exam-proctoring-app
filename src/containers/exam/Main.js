@@ -31,7 +31,7 @@ export default function Main () {
     const [questionList, setQuestionList] = useState([]);
     
     const [timer, setTimer] = useState(hr + ':' + min + ':' + sec);
-    const [elapsedTime, setElapsedTime] = useState(0)
+    const [questionTimer, setQuestionTimer] = useState(0);
     const [showNav, setShowNav] = useState(false);
     const [showBody, setShowBody] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
@@ -53,6 +53,13 @@ export default function Main () {
     const [allowReview, setAllowReview] = useState(false);
 
     const [sidebarVisibility, setsidebarVisibility] = useState(false);
+    const [seperateTimer, setSeperateTimer] = useState(false);
+    const [seperateTimerInSeconds, setSeperateTimerInSeconds] = useState(0);
+    // console.log(seperateTimer + seperateTimerInSeconds);
+
+    const [allowNavigation, setAllowNavigation] = useState(true);
+    const [reminder, setReminder] = useState(0);
+    const [reminderStatus, setReminderStatus] = useState(false);
 
     // if (window.screen.width < 768) {
     //     setsidebarVisibility({ display: 'none' })
@@ -208,8 +215,8 @@ export default function Main () {
     }
 
     async function saveAnswer() {
+        answerData.elapsed_time_seconds = questionTimer;
 
-        console.log(elapsedTime);
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
 
@@ -274,6 +281,9 @@ export default function Main () {
         else if(index !== questionList.length-2 && value === 'next') {
             setIndex(index+1);
         }
+        else if(index === questionList.length-2 && value === 'next' && !allowNavigation) {
+            console.log("End of Exam");
+        }
         else if(index === questionList.length-2 && value === 'next') {
             setIndex(0);
         }
@@ -312,6 +322,9 @@ export default function Main () {
 
     const countDown = (remTime) => {
         let interval = setInterval(() => {
+            if(remTime.min < reminder && remTime.hr === 0) {
+                setReminderStatus(true);
+            }
             if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
                 clearInterval(interval);
                 // exam end code goes here
@@ -340,18 +353,18 @@ export default function Main () {
 
     return (
         <div>
-            {showInstructions && <Instructions setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
+            {showInstructions && <Instructions setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
-                    {showNav && <Navbar allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
+                    {showNav && <Navbar reminderStatus={reminderStatus} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
                     <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} />
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body primaryLang={primaryLang} setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                        {showBody && <Body questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                            {showFooter && <Footer index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
-                            {showSidebar && <Sidebar allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
+                            {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
                         </div>
                     </div>
                 </div>}

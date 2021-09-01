@@ -3,6 +3,7 @@ import styles from './body.module.css';
 import axios from 'axios';
 
 export default function Body (props) {
+    const [isActive, setIsActive] = useState(false);
 
     // const [answerValue, setAnswerValue] = useState('');
     const [showQuestions, setShowQuestions] = useState(false);
@@ -23,34 +24,32 @@ export default function Body (props) {
     }
 
     useEffect(() => {
+        let interval = null;
+        if (isActive) {
+          interval = setInterval(() => {
+            props.setQuestionTimer(seconds => seconds + 1);
+          }, 1000);
+        } else if (!isActive && props.questionTimer !== 0) {
+          clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [isActive, props.questionTimer]);
+
+    useEffect(() => {
         // props.elapsedTime = 0;
         // console.log(props.elapsedTime);
         // console.log("before true");
         // elapsedTimer(true);
+        console.log(props.questionTimer);
+        props.setQuestionTimer(0);
+        setIsActive(false);
+
+        setIsActive(true);
 
         props.setFooterFun(false);
         setShowQuestions(false);
         SendPostRequest();
-    }, [props.index]); // eslint-disable-line react-hooks/exhaustive-deps
-    
-    // const elapsedTimer = (flag) => {
-    //     let interval = setInterval(() => {
-    //         props.elapsedTime += 1;
-    //         if(!flag) {
-    //             clearInterval(interval);
-    //         }
-    //     }, 1000)
-    // }
-
-    useEffect(() => {
-        let elapsedTime = 0;
-        const interval = setInterval(() => {
-            elapsedTime++;
-        }, 1000);
-        return () => {
-            props.setElapsedTime(elapsedTime);
-            clearInterval(interval);
-        };
     }, [props.index]); // eslint-disable-line react-hooks/exhaustive-deps
 
     async function SendPostRequest() {
