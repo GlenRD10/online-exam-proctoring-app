@@ -24,6 +24,10 @@ body {
     display: none;
   }
 
+  .showSidebar {
+    display: block;
+  }
+
   .bodyAndFooter {
     width: 100%;
   }

@@ -4,6 +4,7 @@ import Footer from './Footer';
 import Body from './Body';
 import Sidebar from './Sidebar';
 import Instructions from './Instructions';
+import LanguageBar from './LanguageBar';
 import styles from './main.module.css'
 import { useEffect , useState} from 'react';
 import { useLocation } from 'react-router';
@@ -51,7 +52,7 @@ export default function Main () {
     const [languageChosen, setLanguageChosen] = useState(primaryLang !== '' ? primaryLang : '');
     const [allowReview, setAllowReview] = useState(false);
 
-    const [sidebarVisibility, setsidebarVisibility] = useState({ display: '' })
+    const [sidebarVisibility, setsidebarVisibility] = useState(false);
 
     // if (window.screen.width < 768) {
     //     setsidebarVisibility({ display: 'none' })
@@ -343,12 +344,13 @@ export default function Main () {
             <FullScreen handle={handle}>
                 {showDiv && <div>
                     {showNav && <Navbar allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
+                    <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} />
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} primaryLang={primaryLang} setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                        {showBody && <Body primaryLang={primaryLang} setElapsedTime={setElapsedTime} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
                             {showFooter && <Footer clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
-                        <div className={styles.sidebar} style={sidebarVisibility}>
+                        <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
                             {showSidebar && <Sidebar allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
                         </div>
                     </div>

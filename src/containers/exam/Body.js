@@ -105,22 +105,23 @@ export default function Body (props) {
         props.updateAnswerValue(event.target.id)
     }
 
-    function btnHandler() {
-        if (window.screen.width <= 768) {
-            if (props.sidebarVisibility.display === '' || props.sidebarVisibility.display === 'none') props.setsidebarVisibility({ display: 'block' })
-            else props.setsidebarVisibility({ display: 'none' })
-        }
-    }
+    // function btnHandler() {
+    //     if (window.screen.width <= 768) {
+    //         if (props.sidebarVisibility.display === '' || props.sidebarVisibility.display === 'none') props.setsidebarVisibility({ display: 'block' })
+    //         else props.setsidebarVisibility({ display: 'none' })
+    //     }
+    // }
 
     let img1 = Buffer.from(props.questionList[props.index][24], "base64").toString();
     // let img2 = Buffer.from(props.questionList[props.index][25], "base64").toString();
     
     return (
         <div className={styles.body}>
-            <button style={{float: 'left'}} onClick={btnHandler}>Click me!</button>
+            {/* <button style={{float: 'left'}} onClick={btnHandler}>Click me!</button> */}
             {showQuestions && <section className={styles.question}>
                 <h3>Question number {props.index+1}</h3>
-                <p>{props.languageChosen === props.primaryLang ? props.questionList[props.index][14] : props.questionList[props.index][19]}<img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt="" /></p>
+                <div dangerouslySetInnerHTML={{__html: props.languageChosen === props.primaryLang ? props.questionList[props.index][14] : props.questionList[props.index][19]}}></div>
+                <img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt="" />
             </section>}
             {showQuestions && <section className={styles.options}>
                 <ul onChange={radioHandler}>
