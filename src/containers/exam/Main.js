@@ -10,8 +10,13 @@ import { useEffect , useState} from 'react';
 import { useLocation } from 'react-router';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import axios from 'axios';
+import Modal from "../modal/modal";
+import ImageModal from "../modal/image_modal";
 
 export default function Main () {
+    let img1;
+    const [showImage, setShowImage] = useState(false);
+    const [show, setShow] = useState(false);
 
     const location = useLocation();
     const time_remaining = location.state.examData[12];
@@ -187,6 +192,7 @@ export default function Main () {
             setShowBody(true);
             setShowFooter(true);
             setShowSidebar(true);
+            img1 = Buffer.from(questionList[index][24], "base64").toString();
             
         } catch(e) {
             console.log(e.response);
@@ -350,23 +356,37 @@ export default function Main () {
             }
         }, 1000)
     }
+    
 
     return (
         <div>
             {showInstructions && <Instructions setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
+            
             <FullScreen handle={handle}>
                 {showDiv && <div>
+                    <ImageModal title="Exam Summary" onClose={() => setShowImage(false)} showImage={showImage}>
+                        <img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt=""/>
+                    </ImageModal>
+                    <Modal title="Exam Summary" onClose={() => setShow(false)} show={show}>
+                        <ul>
+                            <li><span style={{backgroundColor: 'green'}}>{legendCtn[0]}</span> Attempted</li>
+                            <li><span style={{backgroundColor: '#9ad1d4'}}>{legendCtn[1]}</span> Not Attempted</li>
+                            {allowReview && <li><span style={{backgroundColor: 'orange'}}>{legendCtn[2]}</span> Attempted and Review</li>}
+                            {allowReview && <li><span style={{backgroundColor: 'brown'}}>{legendCtn[3]}</span> Not Attempted and Review</li>}
+                        </ul>
+                    </Modal>
                     {showNav && <Navbar reminderStatus={reminderStatus} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
                     <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage}/>
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                        {showBody && <Body setShowImage={setShowImage} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                            {showFooter && <Footer setShow={setShow} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
                             {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
                         </div>
                     </div>
+
                 </div>}
             </FullScreen>
         </div>

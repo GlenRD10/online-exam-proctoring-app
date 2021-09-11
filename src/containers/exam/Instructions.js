@@ -117,6 +117,7 @@ export default function Instructions (props) {
                 props.setSeperateTimer(true);
                 props.setSeperateTimerInSeconds(backendData[0][6]);
             }
+            
 
         } catch(e) {
             console.log(e.response);
