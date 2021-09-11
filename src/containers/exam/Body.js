@@ -7,11 +7,6 @@ Modal.setAppElement("#root");
 
 export default function Body (props) {
 
-    const [optionA, setOptionA] = useState('');
-    const [optionB, setOptionB] = useState('');
-    const [optionC, setOptionC] = useState('');
-    const [optionD, setOptionD] = useState('');
-
     const [isActive, setIsActive] = useState(false);
 
     // const [answerValue, setAnswerValue] = useState('');
@@ -102,7 +97,6 @@ export default function Body (props) {
                 }
                 props.updateAnswerValue(questionAttemptData[0]);
             }
-            getOption();
             setShowOptions(true);
             setShowQuestions(true);
             props.setFooterFun(true);
@@ -130,138 +124,6 @@ export default function Body (props) {
     const imageClick = () => {
         props.setShowImage(true);
     } 
-
-    function getOption() {
-        if(props.questionList[props.index][27][0] === 'A') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionA(props.questionList[props.index][15]);
-            }
-            else {
-                setOptionA(props.questionList[props.index][20]);
-            }
-        }
-        if(props.questionList[props.index][27][2] === 'A') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionB(props.questionList[props.index][15]);
-            }
-            else {
-                setOptionB(props.questionList[props.index][20]);
-            }
-        }
-        if(props.questionList[props.index][27][4] === 'A') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionC(props.questionList[props.index][15]);
-            }
-            else {
-                setOptionC(props.questionList[props.index][20]);
-            }
-        }
-        if(props.questionList[props.index][27][6] === 'A') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionD(props.questionList[props.index][15]);
-            }
-            else {
-                setOptionD(props.questionList[props.index][20]);
-            }
-        }
-        if(props.questionList[props.index][27][0] === 'B') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionA(props.questionList[props.index][16]);
-            }
-            else {
-                setOptionA(props.questionList[props.index][21]);
-            }
-        }
-        if(props.questionList[props.index][27][2] === 'B') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionB(props.questionList[props.index][16]);
-            }
-            else {
-                setOptionB(props.questionList[props.index][21]);
-            }
-        }
-        else if(props.questionList[props.index][27][4] === 'B') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionC(props.questionList[props.index][16]);
-            }
-            else {
-                setOptionC(props.questionList[props.index][21]);
-            }
-        }
-        if(props.questionList[props.index][27][6] === 'B') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionD(props.questionList[props.index][16]);
-            }
-            else {
-                setOptionD(props.questionList[props.index][21]);
-            }
-        }
-        if(props.questionList[props.index][27][0] === 'C') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionA(props.questionList[props.index][17]);
-            }
-            else {
-                setOptionA(props.questionList[props.index][22]);
-            }
-        }
-        if(props.questionList[props.index][27][2] === 'C') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionB(props.questionList[props.index][17]);
-            }
-            else {
-                setOptionB(props.questionList[props.index][22]);
-            }
-        }
-        if(props.questionList[props.index][27][4] === 'C') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionC(props.questionList[props.index][17]);
-            }
-            else {
-                setOptionC(props.questionList[props.index][22]);
-            }
-        }
-        if(props.questionList[props.index][27][6] === 'C') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionD(props.questionList[props.index][17]);
-            }
-            else {
-                setOptionD(props.questionList[props.index][22]);
-            }
-        }
-        if(props.questionList[props.index][27][0] === 'D') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionA(props.questionList[props.index][18]);
-            }
-            else {
-                setOptionA(props.questionList[props.index][23]);
-            }
-        }
-        if(props.questionList[props.index][27][2] === 'D') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionB(props.questionList[props.index][18]);
-            }
-            else {
-                setOptionB(props.questionList[props.index][23]);
-            }
-        }
-        if(props.questionList[props.index][27][4] === 'D') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionC(props.questionList[props.index][18]);
-            }
-            else {
-                setOptionC(props.questionList[props.index][23]);
-            }
-        }
-        if(props.questionList[props.index][27][6] === 'D') {
-            if(props.languageChosen === props.primaryLang) {
-                setOptionD(props.questionList[props.index][18]);
-            }
-            else {
-                setOptionD(props.questionList[props.index][23]);
-            }
-        }
-    }
-    
     
     return (
         <div className={styles.body}>
@@ -276,16 +138,16 @@ export default function Body (props) {
                 
                 <ul onChange={radioHandler}>
                     <li>
-                        <label htmlFor="opt1"><input type="radio" name="ans" id="a" checked={props.answerValue === 'a'} />{optionA}</label>
+                        <label htmlFor="opt1"><input type="radio" name="ans" id={props.questionList[props.index][27][0].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][0].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][15] : props.questionList[props.index][20]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt2"><input type="radio" name="ans" id="b" checked={props.answerValue === 'b'} />{optionB}</label>
+                        <label htmlFor="opt2"><input type="radio" name="ans" id={props.questionList[props.index][27][2].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][2].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][16] : props.questionList[props.index][21]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt3"><input type="radio" name="ans" id="c" checked={props.answerValue === 'c'} />{optionC}</label>
+                        <label htmlFor="opt3"><input type="radio" name="ans" id={props.questionList[props.index][27][4].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][4].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][17] : props.questionList[props.index][22]}</label>
                     </li>
                     <li>
-                        <label htmlFor="opt4"><input type="radio" name="ans" id="d" checked={props.answerValue === 'd'} />{optionD}</label>
+                        <label htmlFor="opt4"><input type="radio" name="ans" id={props.questionList[props.index][27][6].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][6].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][18] : props.questionList[props.index][23]}</label>
                     </li>
                 </ul>
                 {/* <ul onChange={radioHandler}>
