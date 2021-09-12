@@ -30,6 +30,9 @@ export default function Body (props) {
 
     useEffect(() => {
         let interval = null;
+        if(props.seperateTimer && props.seperateTimerInSeconds === props.questionTimer) {
+            props.setIndexValue('next');
+        }
         if (isActive) {
           interval = setInterval(() => {
             props.setQuestionTimer(seconds => seconds + 1);
