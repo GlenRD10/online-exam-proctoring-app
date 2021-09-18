@@ -5,6 +5,7 @@ import Body from './Body';
 import Sidebar from './Sidebar';
 import Instructions from './Instructions';
 import LanguageBar from './LanguageBar';
+import WebcamCap from './WebcamCap';
 import styles from './main.module.css'
 import { useEffect , useState} from 'react';
 import { useLocation } from 'react-router';
@@ -361,7 +362,7 @@ export default function Main () {
     return (
         <div>
             {showInstructions && <Instructions setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
-            
+            {/* <WebcamCap/> */}
             <FullScreen handle={handle}>
                 {showDiv && <div>
                     <ImageModal title="Exam Summary" onClose={() => setShowImage(false)} showImage={showImage}>
