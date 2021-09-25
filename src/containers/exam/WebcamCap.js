@@ -1,6 +1,7 @@
 import React from "react";
 import Webcam from "react-webcam";
 import styles from './webcamcap.module.css';
+import { useNavigate } from "react-router-dom";
 
 export default function WebcamCap () {
     const webcamRef = React.useRef(null);
@@ -30,8 +31,13 @@ export default function WebcamCap () {
     //     clearInterval(captureimg);
     // }
 
+    const navigate = useNavigate();
+    const mediaErrorHandler = () => {
+        navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } })
+    }
+
     return (
-        <div>
+        <div className={styles.webcam}>
             <Webcam
                 audio={false}
                 height={720}
@@ -39,6 +45,7 @@ export default function WebcamCap () {
                 screenshotFormat="image/jpeg"
                 width={1280}
                 videoConstraints={{facingMode: 'user'}}
+                onUserMediaError={mediaErrorHandler}
             />
             <button onClick={() => setCaptureImg(false)}>Capture</button>
         </div>

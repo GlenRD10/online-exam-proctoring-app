@@ -1,0 +1,5 @@
+.webcam {
+  z-index: -2;
+  visibility: hidden;
+  position: fixed;
+}
