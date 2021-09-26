@@ -14,7 +14,6 @@ import axios from 'axios';
 import Modal from "../modal/modal";
 import ImageModal from "../modal/image_modal";
 import { useNavigate } from 'react-router-dom';
-import { browserHistory } from 'react-router';
 
 export default function Main () {
     let img1;
@@ -54,8 +53,6 @@ export default function Main () {
     const [reviewStatus, setReviewStatus] = useState(false);
     const [buttonColors, setButtonColors] = useState([]);
     const [legendCtn, setLegendCtn] = useState([]);
-
-    const [ locationKeys, setLocationKeys ] = useState([])
 
     //Settings Parameters 
     const[allowMultiLang, setAllowMultiLang] = useState(false);
@@ -407,7 +404,7 @@ export default function Main () {
     const handle = useFullScreenHandle();
 
     const exitHandler = () =>  {
-        setIndexValue('next');
+        saveAnswer();
         saveSwitchWindow();
         setSwitchWindow(switchWindow + 1);
         navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
@@ -435,7 +432,7 @@ export default function Main () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [] );
 
-    let switchData = {
+    let switchDataMain = {
         exam_session: 'SUMMER-2021',
         user_id: location.state.user_id,
         user_ses_id: location.state.session_id,
@@ -444,11 +441,12 @@ export default function Main () {
         exam_id: exam_id,
         scheduler_id: scheduler_id,
         roll_number: roll_number,
-        ip: localStorage.getItem('ipv4')
+        ip: localStorage.getItem('ipv4'),
     }
 
     async function saveSwitchWindow() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+        let switchData = switchDataMain;
         
         switchData = Object.keys(switchData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(switchData[key]);
@@ -508,7 +506,7 @@ export default function Main () {
 
     async function readSwitchWindow() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        console.log(switchData);
+        let switchData = switchDataMain;
         
         switchData = Object.keys(switchData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(switchData[key]);
