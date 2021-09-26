@@ -13,11 +13,14 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import axios from 'axios';
 import Modal from "../modal/modal";
 import ImageModal from "../modal/image_modal";
+import { useNavigate } from 'react-router-dom';
 
 export default function Main () {
     let img1;
     const [showImage, setShowImage] = useState(false);
     const [show, setShow] = useState(false);
+
+    const [switchWindow, setSwitchWindow] = useState(0);
 
     const location = useLocation();
     const time_remaining = location.state.examData[12];
@@ -223,6 +226,7 @@ export default function Main () {
 
     async function saveAnswer() {
         answerData.elapsed_time_seconds = questionTimer;
+        console.log(answerData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
@@ -250,7 +254,22 @@ export default function Main () {
             console.log(e.response);
         }
 
-    }
+    }   
+
+    const [backPressed, setBackPressed] = useState(false);
+    const navigate = useNavigate();
+    useEffect(() => {
+        window.onpopstate = e => {
+            setBackPressed(true);
+            navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        // setIndexValue('next');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [backPressed])
 
     function setIndexValue(value) {
         let tempArray = buttonColors;
@@ -289,7 +308,7 @@ export default function Main () {
             setIndex(index+1);
         }
         else if(index === questionList.length-2 && value === 'next' && !allowNavigation) {
-            console.log("End of Exam");
+            
         }
         else if(index === questionList.length-2 && value === 'next') {
             setIndex(0);
@@ -298,6 +317,39 @@ export default function Main () {
             setIndex(value);
         }
         saveAnswer();
+    }
+
+    async function endTheExam() {
+        const ipData = {
+            ip: localStorage.getItem('ipv4')
+        }
+        let endTheExamData = Object.assign(data, ipData);
+
+        const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+        
+        endTheExamData = Object.keys(endTheExamData).map((key) => {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(endTheExamData[key]);
+        }).join('&');
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        try {
+            const res = await axios({
+                method: 'post',
+                url: url + 'student_exam_complete',                           
+                crossDomain: true,
+                data: endTheExamData,
+                headers
+            });
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(res.data, 'text/xml');
+            const endExamStatus = xml.documentElement.firstChild.data
+            console.log(endExamStatus);
+
+        } catch(e) {
+            console.log(e.response);
+        }
+
     }
 
     function setLanguage(value) {
@@ -321,11 +373,55 @@ export default function Main () {
         window.addEventListener('fullscreenchange', (event) => {
             let alerted = false
             if (!document.webkitIsFullScreen && !alerted) {
+                saveSwitchWindow();
+                setSwitchWindow(switchWindow+1);
+                // navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
                 alert('You cannot do that!');
                 alerted = true;
             }
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [] );
+
+    let switchData = {
+        exam_session: 'SUMMER-2021',
+        user_id: location.state.user_id,
+        user_ses_id: location.state.session_id,
+        exam_code: exam_code,
+        subject_code: subject_code,
+        exam_id: exam_id,
+        scheduler_id: scheduler_id,
+        roll_number: roll_number,
+        ip: localStorage.getItem('ipv4')
+    }
+
+    async function saveSwitchWindow() {
+        const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+        
+        switchData = Object.keys(switchData).map((key) => {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(switchData[key]);
+        }).join('&');
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        try {
+            const res = await axios({
+                method: 'post',
+                url: url + 'student_exam_switch_window_save',                           
+                crossDomain: true,
+                data: switchData,
+                headers
+            });
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(res.data, 'text/xml');
+            const endExamStatus = xml.documentElement.firstChild.data
+            console.log(endExamStatus);
+
+        } catch(e) {
+            console.log(e.response);
+        }
+
+    }
 
     const countDown = (remTime) => {
         let interval = setInterval(() => {
@@ -334,7 +430,7 @@ export default function Main () {
             }
             if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
                 clearInterval(interval);
-                // exam end code goes here
+                endTheExam();
             } else {
                 if (remTime.sec > 0) remTime.sec -= 1;
                 else {
@@ -357,6 +453,40 @@ export default function Main () {
             }
         }, 1000)
     }
+
+    async function readSwitchWindow() {
+        const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+        console.log(switchData);
+        
+        switchData = Object.keys(switchData).map((key) => {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(switchData[key]);
+        }).join('&');
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        try {
+            const res = await axios({
+                method: 'post',
+                url: url + 'student_exam_switch_window_read',                           
+                crossDomain: true,
+                data: switchData,
+                headers
+            });
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(res.data, 'text/xml');
+            const endExamStatus = xml.documentElement.firstChild.data
+            console.log(endExamStatus);
+
+        } catch(e) {
+            console.log(e.response);
+        }
+
+    }
+
+    useEffect(() => {
+        readSwitchWindow();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [switchWindow])
     
 
     return (
@@ -381,7 +511,7 @@ export default function Main () {
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
                         {showBody && <Body setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} setShowImage={setShowImage} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer setShow={setShow} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                            {showFooter && <Footer endTheExam={endTheExam} setShow={setShow} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
                             {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
