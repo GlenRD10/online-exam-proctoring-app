@@ -14,6 +14,7 @@ import axios from 'axios';
 import Modal from "../modal/modal";
 import ImageModal from "../modal/image_modal";
 import { useNavigate } from 'react-router-dom';
+import { browserHistory } from 'react-router';
 
 export default function Main () {
     let img1;
@@ -53,6 +54,8 @@ export default function Main () {
     const [reviewStatus, setReviewStatus] = useState(false);
     const [buttonColors, setButtonColors] = useState([]);
     const [legendCtn, setLegendCtn] = useState([]);
+
+    const [ locationKeys, setLocationKeys ] = useState([])
 
     //Settings Parameters 
     const[allowMultiLang, setAllowMultiLang] = useState(false);
@@ -256,20 +259,54 @@ export default function Main () {
 
     }   
 
-    const [backPressed, setBackPressed] = useState(false);
+    // const [backPressed, setBackPressed] = useState(false);
     const navigate = useNavigate();
-    useEffect(() => {
-        window.onpopstate = e => {
-            setBackPressed(true);
-            navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     window.onpopstate = e => {
+    //         setBackPressed(true);
+    //         navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+    //     };
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
+
+    // useEffect(() => {
+    //     // setIndexValue('next');
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [backPressed])
+
+    const [isBackButtonClicked, setBackbuttonPress] = useState(false)
 
     useEffect(() => {
-        // setIndexValue('next');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [backPressed])
+
+        window.history.pushState(null, null, window.location.pathname);
+        window.addEventListener('popstate', onBackButtonEvent);
+
+        //logic for showing popup warning on page refresh
+        window.onbeforeunload = function () {
+
+        return "Data will be lost if you leave the page, are you sure?";
+        };
+        return () => {
+        window.removeEventListener('popstate', onBackButtonEvent);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const onBackButtonEvent = (e) => {
+        e.preventDefault();
+        if (!isBackButtonClicked) {
+
+            if (window.confirm("Are you sure you wanna Quit the Exam?")) {
+                setBackbuttonPress(true)
+                setIndexValue('next');
+                navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+            } else {
+                window.history.pushState(null, null, window.location.pathname);
+                setBackbuttonPress(false)
+            }
+        }
+    }
 
     function setIndexValue(value) {
         let tempArray = buttonColors;
@@ -308,7 +345,7 @@ export default function Main () {
             setIndex(index+1);
         }
         else if(index === questionList.length-2 && value === 'next' && !allowNavigation) {
-            
+
         }
         else if(index === questionList.length-2 && value === 'next') {
             setIndex(0);
@@ -369,17 +406,32 @@ export default function Main () {
 
     const handle = useFullScreenHandle();
 
+    const exitHandler = () =>  {
+        setIndexValue('next');
+        saveSwitchWindow();
+        setSwitchWindow(switchWindow + 1);
+        navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+        alert('You have Quit the Exam!');
+    }
+
+    const exitHandlerExec = () => {
+        if (document.webkitIsFullScreen === false) exitHandler();
+        else if (document.mozFullScreen === false) exitHandler();
+        else if (document.msFullScreenElement === false) exitHandler();
+    }
+
     useEffect(() => {
-        window.addEventListener('fullscreenchange', (event) => {
-            let alerted = false
-            if (!document.webkitIsFullScreen && !alerted) {
-                saveSwitchWindow();
-                setSwitchWindow(switchWindow+1);
-                // navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-                alert('You cannot do that!');
-                alerted = true;
-            }
-        })
+        document.addEventListener('fullscreenchange', exitHandlerExec, false);
+        document.addEventListener('mozfullscreenchange', exitHandlerExec, false);
+        document.addEventListener('MSFullscreenChange', exitHandlerExec, false);
+        document.addEventListener('webkitfullscreenchange', exitHandlerExec, false);
+
+        return () => {
+            document.removeEventListener('fullscreenchange', exitHandlerExec, false);
+            document.removeEventListener('mozfullscreenchange', exitHandlerExec, false);
+            document.removeEventListener('MSFullscreenChange', exitHandlerExec, false);
+            document.removeEventListener('webkitfullscreenchange', exitHandlerExec, false);
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [] );
 
