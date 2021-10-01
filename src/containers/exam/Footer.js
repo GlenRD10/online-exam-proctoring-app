@@ -5,8 +5,9 @@ import styles from './footer.module.css';
 export default function Footer (props) {
     function BtnHandler(e) {
         if(props.index === props.questionList.length - 2) {
-            props.endTheExam();
-            props.setShow(true);
+            // props.endTheExam();
+            // props.setShow(true);
+            props.setShowSubmitDialog(true);
         }
         else {
             const value = e.currentTarget.getAttribute("data-value");

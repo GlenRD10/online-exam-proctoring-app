@@ -2,8 +2,9 @@ import React from "react";
 import Webcam from "react-webcam";
 import styles from './webcamcap.module.css';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export default function WebcamCap () {
+export default function WebcamCap (props) {
     const webcamRef = React.useRef(null);
     const [imgSrc, setImgSrc] = React.useState(null);
     const [captureImg, setCaptureImg] = React.useState(true);
@@ -13,6 +14,43 @@ export default function WebcamCap () {
         console.log(imageSrc);
         setImgSrc(imageSrc);
     }, [webcamRef, setImgSrc]);
+
+    const sendImage = async () => {
+        const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
+
+        let data = {
+            exam_session: 'SUMMER-2021',
+            user_id: props.examData.user_id,
+            user_ses_id: props.examData.user_ses_id,
+            exam_code: props.examData.exam_code,
+            subject_code: props.examData.subject_code,
+            exam_id: props.examData.exam_id,
+            scheduler_id: props.examData.scheduler_id,
+            roll_number: props.examData.roll_number,
+            student_photo_image: '',
+            ip: localStorage.getItem('ipv4')
+        };
+
+        data = Object.keys(data).map((key) => {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+        }).join('&');
+
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+
+        try {
+            const res = await axios({
+                method: 'post',
+                url: url + 'student_exam_photo_save',
+                crossDomain: true,
+                data,
+                headers
+            })
+        } catch (e) {
+            console.log(e.response);
+        }
+    }
     
     React.useEffect(() => {
         let interval;
@@ -23,6 +61,12 @@ export default function WebcamCap () {
         }
         return () => clearInterval(interval);
     }, [captureImg, capture]);
+
+    // React.useEffect(() => {
+    //     sendImage();
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [imgSrc]);
+
     // const captureimg = setInterval(() => {
     //     capture();
     // }, 10000);

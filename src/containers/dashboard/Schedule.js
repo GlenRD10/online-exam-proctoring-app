@@ -6,7 +6,7 @@ export default function Schedule (props) {
     let index=0;
     
     const filteredArray = props.examData.filter((item, index) => {
-        if (item[13] === 'Start Exam')
+        if (item[13] === 'Start Exam' || item[13] === 'Resume Exam')
             item[13] = 'ongoing';
         else if (item[13] === 'Exam Allocated')
             item[13] = 'yet-to-start';

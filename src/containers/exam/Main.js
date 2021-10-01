@@ -70,6 +70,8 @@ export default function Main () {
     const [reminder, setReminder] = useState(0);
     const [reminderStatus, setReminderStatus] = useState(false);
 
+    const [showSubmitDialog, setShowSubmitDialog] = useState(false);
+
     // if (window.screen.width < 768) {
     //     setsidebarVisibility({ display: 'none' })
     // }
@@ -417,20 +419,20 @@ export default function Main () {
         else if (document.msFullScreenElement === false) exitHandler();
     }
 
-    useEffect(() => {
-        document.addEventListener('fullscreenchange', exitHandlerExec, false);
-        document.addEventListener('mozfullscreenchange', exitHandlerExec, false);
-        document.addEventListener('MSFullscreenChange', exitHandlerExec, false);
-        document.addEventListener('webkitfullscreenchange', exitHandlerExec, false);
+    // useEffect(() => {
+    //     document.addEventListener('fullscreenchange', exitHandlerExec, false);
+    //     document.addEventListener('mozfullscreenchange', exitHandlerExec, false);
+    //     document.addEventListener('MSFullscreenChange', exitHandlerExec, false);
+    //     document.addEventListener('webkitfullscreenchange', exitHandlerExec, false);
 
-        return () => {
-            document.removeEventListener('fullscreenchange', exitHandlerExec, false);
-            document.removeEventListener('mozfullscreenchange', exitHandlerExec, false);
-            document.removeEventListener('MSFullscreenChange', exitHandlerExec, false);
-            document.removeEventListener('webkitfullscreenchange', exitHandlerExec, false);
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [] );
+    //     return () => {
+    //         document.removeEventListener('fullscreenchange', exitHandlerExec, false);
+    //         document.removeEventListener('mozfullscreenchange', exitHandlerExec, false);
+    //         document.removeEventListener('MSFullscreenChange', exitHandlerExec, false);
+    //         document.removeEventListener('webkitfullscreenchange', exitHandlerExec, false);
+    //     }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [] );
 
     let switchDataMain = {
         exam_session: 'SUMMER-2021',
@@ -542,7 +544,7 @@ export default function Main () {
     return (
         <div>
             {showInstructions && <Instructions setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
-            <WebcamCap/>
+            <WebcamCap examData={data} />
             <FullScreen handle={handle}>
                 {showDiv && <div>
                     <ImageModal title="Exam Summary" onClose={() => setShowImage(false)} showImage={showImage}>
@@ -560,8 +562,8 @@ export default function Main () {
                     <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage}/>
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} setShowImage={setShowImage} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer endTheExam={endTheExam} setShow={setShow} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                        {showBody && <Body allowReview={allowReview} legendCtn={legendCtn} showSubmitDialog={showSubmitDialog} setShowSubmitDialog={setShowSubmitDialog} setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} setShowImage={setShowImage} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                            {showFooter && <Footer setShowSubmitDialog={setShowSubmitDialog} endTheExam={endTheExam} setShow={setShow} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
                             {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}

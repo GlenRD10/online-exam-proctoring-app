@@ -5,7 +5,7 @@ export default function Sidebar (props) {
     let ongoingCards = 0, yetToStartCards = 0, expiredCards = 0, completedCards = 0;
 
     const filteredArray = props.examData.filter((item, index) => {
-        if (item[13] === 'ongoing' || item[13] === 'Start Exam'){
+        if (item[13] === 'ongoing' || item[13] === 'Start Exam' || item[13] === 'Resume Exam'){
             ongoingCards += 1;
         }            
         else if (item[13] === 'yet-to-start' || item[13] === 'Exam Allocated') {
