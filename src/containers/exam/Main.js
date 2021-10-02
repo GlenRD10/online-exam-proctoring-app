@@ -14,9 +14,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function Main () {
-
-    const [switchWindow, setSwitchWindow] = useState(0);
-    const [maxSwitchWindow, setMaxSwitchWindow] = useState(999);
     const [endExamState, setEndExamState] = useState('y');
 
     // const [seperateTimerEnd, setSeperateTimerEnd] = useState(false);
@@ -359,11 +356,20 @@ export default function Main () {
     }
 
     async function endTheExam() {
-        const ipData = {
+        let endTheExamData = {
+            exam_session: 'SUMMER-2021',
+            user_id: location.state.user_id,
+            user_ses_id: location.state.session_id,
+            exam_code: exam_code,
+            subject_code: subject_code,
+            exam_id: exam_id,
+            scheduler_id: scheduler_id,
+            roll_number: roll_number,
             ip: localStorage.getItem('ipv4'),
             student_end_exam: endExamState
         }
-        let endTheExamData = Object.assign(data, ipData);
+
+        console.log(endTheExamData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
@@ -409,21 +415,25 @@ export default function Main () {
 
     const handle = useFullScreenHandle();
 
-    const exitHandler = () =>  {
+    const exitHandler = async () =>  {
         // saveAnswer();
         //Fix the save answer state
-        readSwitchWindow(); // Doesn't do anything, just console logs the window switch status
+        let str = await readSwitchWindow(); // Doesn't do anything, just console logs the window switch status
         saveSwitchWindow();
-        setSwitchWindow(switchWindow + 1);
-        if(switchWindow === maxSwitchWindow) {
-            setEndExamState('s');
-            // endTheExam();
-            navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-            alert('You have exceeded the maximum window switches that were allowed!');
-        } else {
-            navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-            alert('You have Quit the Exam!');
-        }
+        const myArr = str.toString().split('~'); 
+        console.log(myArr[1]);  
+        if(proctoringEnabled) {
+            if(myArr[0] <= myArr[1]) {
+                setEndExamState('s');
+                endTheExam();
+                navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+                alert('You have exceeded the maximum window switches that were allowed!');
+            } else {
+                navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+                alert('You have Quit the Exam!');
+            }
+        }    
+        
     }
 
     const exitHandlerExec = () => {
@@ -558,7 +568,8 @@ export default function Main () {
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
             const windowSwitchStatus = xml.documentElement.firstChild.data
-            console.log(windowSwitchStatus);
+            console.log(typeof windowSwitchStatus);
+            return windowSwitchStatus;
 
         } catch(e) {
             console.log(e.response);
@@ -568,7 +579,7 @@ export default function Main () {
 
     return (
         <div>
-            {showInstructions && <Instructions seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} settingsData={settingsData} setSettingsData={setSettingsData} setMaxSwitchWindow={setMaxSwitchWindow} setProctoringEnabled={setProctoringEnabled} setSendImgTimer={setSendImgTimer} setSwitchWindow={setSwitchWindow} setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
+            {showInstructions && <Instructions seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} settingsData={settingsData} setSettingsData={setSettingsData} setProctoringEnabled={setProctoringEnabled} setSendImgTimer={setSendImgTimer} setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
             {(!showInstructions && proctoringEnabled) && <WebcamCap sendImgTimer={sendImgTimer} examData={data} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>

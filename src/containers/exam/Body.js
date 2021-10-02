@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import styles from './body.module.css';
 import axios from 'axios';
 import Modal from "react-modal";
+import { useNavigate } from 'react-router-dom';
 // import { Dialog, DialogContent, DialogContentText, Button, DialogActions, DialogTitle } from '@material-ui/core';
 
 Modal.setAppElement("#root");
@@ -15,7 +16,16 @@ const ImageDialog = (props) => {
     )
 }
 
+
+
 const SubmitDialog = (props) => {
+    const navigate = useNavigate();
+    function endExamFnc() {
+        props.endTheExam();
+        navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+        alert('You have Submitted your exam!');
+    }
+
     return (
         <div style={{width: '50%', left: '25%'}} className={styles.dialog}>
             <h4 style={{textAlign: 'center', fontSize: '25px'}}>Exam Summary</h4>
@@ -25,7 +35,7 @@ const SubmitDialog = (props) => {
                 {props.allowReview && <li><span style={{backgroundColor: 'orange'}}>{props.legendCtn[2]}</span> Attempted and Review</li>}
                 {props.allowReview && <li><span style={{backgroundColor: 'brown'}}>{props.legendCtn[3]}</span> Not Attempted and Review</li>}
             </ul>
-            <button onClick={() => props.endTheExam}>Submit</button>
+            <button onClick={endExamFnc}>Submit</button>
             <button onClick={() => props.setShowSubmitDialog(false)}>Close</button>
         </div>
         
@@ -197,7 +207,7 @@ export default function Body (props) {
                 </ul>
             </section>}
 
-            {props.showSubmitDialog && <SubmitDialog allowReview={props.allowReview} legendCtn={props.legendCtn} setShowSubmitDialog={props.setShowSubmitDialog} />}
+            {props.showSubmitDialog && <SubmitDialog endTheExam={props.endTheExam} allowReview={props.allowReview} legendCtn={props.legendCtn} setShowSubmitDialog={props.setShowSubmitDialog} />}
         </div>
     )
 }

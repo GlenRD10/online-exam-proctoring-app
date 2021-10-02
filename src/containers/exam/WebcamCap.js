@@ -65,7 +65,7 @@ export default function WebcamCap (props) {
     }, [captureImg, capture]);
 
     React.useEffect(() => {
-        sendImage();
+        if(imgSrc) sendImage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [imgSrc]);
 

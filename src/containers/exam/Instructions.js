@@ -125,8 +125,6 @@ export default function Instructions (props) {
                 props.setSeperateTimer(true);
                 props.setSeperateTimerInSeconds(backendData[0][6]);
             }
-            props.setMaxSwitchWindow(backendData[0][24]);
-            props.setSwitchWindow(backendData[0][30]);
             // eslint-disable-next-line eqeqeq
             if(backendData[0][31] != 0) props.setProctoringEnabled(true);
             props.setSendImgTimer(backendData[0][31]);
