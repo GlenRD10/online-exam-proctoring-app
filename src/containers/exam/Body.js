@@ -25,7 +25,7 @@ const SubmitDialog = (props) => {
                 {props.allowReview && <li><span style={{backgroundColor: 'orange'}}>{props.legendCtn[2]}</span> Attempted and Review</li>}
                 {props.allowReview && <li><span style={{backgroundColor: 'brown'}}>{props.legendCtn[3]}</span> Not Attempted and Review</li>}
             </ul>
-            <button onClick={() => props.setShowSubmitDialog(false)}>Submit</button>
+            <button onClick={() => props.endTheExam}>Submit</button>
             <button onClick={() => props.setShowSubmitDialog(false)}>Close</button>
         </div>
         
@@ -58,7 +58,13 @@ export default function Body (props) {
 
     useEffect(() => {
         let interval = null;
-        if(props.seperateTimer && props.seperateTimerInSeconds === props.questionTimer) {
+        // eslint-disable-next-line eqeqeq
+        if(props.seperateTimer && props.seperateTimerInSeconds == props.questionTimer) {
+            let hr = Math.trunc(props.seperateTimerInSeconds / 3600);
+            let min = Math.trunc((props.seperateTimerInSeconds % 3600) / 60);
+            let sec = Math.trunc(props.seperateTimerInSeconds % 60)
+            props.countDown({hr, min, sec});
+            console.log("Inside the Timer");
             props.setIndexValue('next');
         }
         if (isActive) {

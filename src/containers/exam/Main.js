@@ -11,16 +11,13 @@ import { useEffect , useState} from 'react';
 import { useLocation } from 'react-router';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import axios from 'axios';
-import Modal from "../modal/modal";
-import ImageModal from "../modal/image_modal";
 import { useNavigate } from 'react-router-dom';
 
 export default function Main () {
-    let img1;
-    const [showImage, setShowImage] = useState(false);
-    const [show, setShow] = useState(false);
 
     const [switchWindow, setSwitchWindow] = useState(0);
+    const [maxSwitchWindow, setMaxSwitchWindow] = useState(999);
+    const [endExamState, setEndExamState] = useState('y');
 
     const location = useLocation();
     const time_remaining = location.state.examData[12];
@@ -45,6 +42,9 @@ export default function Main () {
     const [showBody, setShowBody] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
+
+    const [sendImgTimer, setSendImgTimer] = useState(0);
+    const [proctoringEnabled, setProctoringEnabled] = useState(false);
 
     const [showDiv, setShowDiv] = useState(false);
     const [showInstructions, setShowInstructions] = useState(true);
@@ -71,6 +71,8 @@ export default function Main () {
     const [reminderStatus, setReminderStatus] = useState(false);
 
     const [showSubmitDialog, setShowSubmitDialog] = useState(false);
+
+    const [settingsData, setSettingsData] = useState([]);
 
     // if (window.screen.width < 768) {
     //     setsidebarVisibility({ display: 'none' })
@@ -198,7 +200,6 @@ export default function Main () {
             setShowBody(true);
             setShowFooter(true);
             setShowSidebar(true);
-            img1 = Buffer.from(questionList[index][24], "base64").toString();
             
         } catch(e) {
             console.log(e.response);
@@ -357,7 +358,8 @@ export default function Main () {
 
     async function endTheExam() {
         const ipData = {
-            ip: localStorage.getItem('ipv4')
+            ip: localStorage.getItem('ipv4'),
+            student_end_exam: endExamState
         }
         let endTheExamData = Object.assign(data, ipData);
 
@@ -406,11 +408,20 @@ export default function Main () {
     const handle = useFullScreenHandle();
 
     const exitHandler = () =>  {
-        saveAnswer();
+        // saveAnswer();
+        //Fix the save answer state
+        readSwitchWindow(); // Doesn't do anything, just console logs the window switch status
         saveSwitchWindow();
         setSwitchWindow(switchWindow + 1);
-        navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-        alert('You have Quit the Exam!');
+        if(switchWindow === maxSwitchWindow) {
+            setEndExamState('s');
+            endTheExam();
+            navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+            alert('You have exceeded the maximum window switches that were allowed!');
+        } else {
+            navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+            alert('You have Quit the Exam!');
+        }
     }
 
     const exitHandlerExec = () => {
@@ -419,20 +430,34 @@ export default function Main () {
         else if (document.msFullScreenElement === false) exitHandler();
     }
 
-    // useEffect(() => {
-    //     document.addEventListener('fullscreenchange', exitHandlerExec, false);
-    //     document.addEventListener('mozfullscreenchange', exitHandlerExec, false);
-    //     document.addEventListener('MSFullscreenChange', exitHandlerExec, false);
-    //     document.addEventListener('webkitfullscreenchange', exitHandlerExec, false);
+    useEffect(() => {
+        document.addEventListener('fullscreenchange', exitHandlerExec, false);
+        document.addEventListener('mozfullscreenchange', exitHandlerExec, false);
+        document.addEventListener('MSFullscreenChange', exitHandlerExec, false);
+        document.addEventListener('webkitfullscreenchange', exitHandlerExec, false);
 
-    //     return () => {
-    //         document.removeEventListener('fullscreenchange', exitHandlerExec, false);
-    //         document.removeEventListener('mozfullscreenchange', exitHandlerExec, false);
-    //         document.removeEventListener('MSFullscreenChange', exitHandlerExec, false);
-    //         document.removeEventListener('webkitfullscreenchange', exitHandlerExec, false);
-    //     }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [] );
+        return () => {
+            document.removeEventListener('fullscreenchange', exitHandlerExec, false);
+            document.removeEventListener('mozfullscreenchange', exitHandlerExec, false);
+            document.removeEventListener('MSFullscreenChange', exitHandlerExec, false);
+            document.removeEventListener('webkitfullscreenchange', exitHandlerExec, false);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [] );
+
+    useEffect(() => {
+        const handleEsc = (event) => {
+           if (event.keyCode === 27) {
+            console.log(answerData);
+          }
+        };
+        window.addEventListener('keydown', handleEsc);
+    
+        return () => {
+          window.removeEventListener('keydown', handleEsc);
+        };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
     let switchDataMain = {
         exam_session: 'SUMMER-2021',
@@ -526,8 +551,8 @@ export default function Main () {
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
-            const endExamStatus = xml.documentElement.firstChild.data
-            console.log(endExamStatus);
+            const windowSwitchStatus = xml.documentElement.firstChild.data
+            console.log(windowSwitchStatus);
 
         } catch(e) {
             console.log(e.response);
@@ -535,35 +560,18 @@ export default function Main () {
 
     }
 
-    useEffect(() => {
-        readSwitchWindow();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [switchWindow])
-    
-
     return (
         <div>
-            {showInstructions && <Instructions setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
-            <WebcamCap examData={data} />
+            {showInstructions && <Instructions seperateTimer={seperateTimer} seperateTimerInSecomds={seperateTimerInSeconds} settingsData={settingsData} setSettingsData={setSettingsData} setMaxSwitchWindow={setMaxSwitchWindow} setProctoringEnabled={setProctoringEnabled} setSendImgTimer={setSendImgTimer} setSwitchWindow={setSwitchWindow} setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
+            {(!showInstructions && proctoringEnabled) && <WebcamCap sendImgTimer={sendImgTimer} examData={data} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
-                    <ImageModal title="Exam Summary" onClose={() => setShowImage(false)} showImage={showImage}>
-                        <img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt=""/>
-                    </ImageModal>
-                    <Modal title="Exam Summary" onClose={() => setShow(false)} show={show}>
-                        <ul>
-                            <li><span style={{backgroundColor: 'green'}}>{legendCtn[0]}</span> Attempted</li>
-                            <li><span style={{backgroundColor: '#9ad1d4'}}>{legendCtn[1]}</span> Not Attempted</li>
-                            {allowReview && <li><span style={{backgroundColor: 'orange'}}>{legendCtn[2]}</span> Attempted and Review</li>}
-                            {allowReview && <li><span style={{backgroundColor: 'brown'}}>{legendCtn[3]}</span> Not Attempted and Review</li>}
-                        </ul>
-                    </Modal>
                     {showNav && <Navbar reminderStatus={reminderStatus} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
                     <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage}/>
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body allowReview={allowReview} legendCtn={legendCtn} showSubmitDialog={showSubmitDialog} setShowSubmitDialog={setShowSubmitDialog} setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} setShowImage={setShowImage} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer setShowSubmitDialog={setShowSubmitDialog} endTheExam={endTheExam} setShow={setShow} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                        {showBody && <Body countDown={countDown} allowReview={allowReview} endTheExam={endTheExam} legendCtn={legendCtn} showSubmitDialog={showSubmitDialog} setShowSubmitDialog={setShowSubmitDialog} setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
+                            {showFooter && <Footer setShowSubmitDialog={setShowSubmitDialog} endTheExam={endTheExam} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
                             {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}

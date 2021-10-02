@@ -4,7 +4,7 @@ import axios from 'axios';
 import styles from './instructions.module.css';
 
 export default function Instructions (props) {
-    const [settingsData, setSettingsData] = useState([]);
+    
     const [showInstructions, setShowInstructions] = useState(false);
     // const handle = useFullScreenHandle();
     const [checkBox, setCheckBox] = useState(false);
@@ -32,10 +32,17 @@ export default function Instructions (props) {
         props.setShowDiv(true);
         props.setShowInstructions(false);
         props.handle.enter();
-        let hr = Math.trunc(props.timeRemaining / 3600);
-        let min = Math.trunc((props.timeRemaining % 3600) / 60);
-        let sec = Math.trunc(props.timeRemaining % 60)
-        props.countDown({hr, min, sec})
+        if(props.seperateTimer) {
+            let hr = Math.trunc(props.seperateTimerInSeconds / 3600);
+            let min = Math.trunc((props.seperateTimerInSeconds % 3600) / 60);
+            let sec = Math.trunc(props.seperateTimerInSeconds % 60)
+            props.countDown({hr, min, sec})
+        } else {
+            let hr = Math.trunc(props.timeRemaining / 3600);
+            let min = Math.trunc((props.timeRemaining % 3600) / 60);
+            let sec = Math.trunc(props.timeRemaining % 60)
+            props.countDown({hr, min, sec})
+        }
    }
 
    async function startExam() {
@@ -103,7 +110,7 @@ export default function Instructions (props) {
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
             const backendData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
-            setSettingsData(backendData);
+            props.setSettingsData(backendData);
             setShowInstructions(true);
             console.log(backendData);
             props.setAllowReview(backendData[0][0] === 'y' ? true : false);
@@ -113,10 +120,15 @@ export default function Instructions (props) {
             props.setSecondaryLang(backendData[0][15]);
             props.setLanguageChosen(backendData[0][14]);
             props.setReminder(backendData[0][21]);
-            if(backendData[0][5]) {
+            if(backendData[0][5] === 'y') {
                 props.setSeperateTimer(true);
                 props.setSeperateTimerInSeconds(backendData[0][6]);
             }
+            props.setMaxSwitchWindow(backendData[0][24]);
+            props.setSwitchWindow(backendData[0][30]);
+            // eslint-disable-next-line eqeqeq
+            if(backendData[0][31] != 0) props.setProctoringEnabled(true);
+            props.setSendImgTimer(backendData[0][31]);
             
 
         } catch(e) {
@@ -129,7 +141,7 @@ export default function Instructions (props) {
         <div className={styles.container}>
             <h2>Exam Name Goes Here</h2>
             <section className={styles.instruction}>
-                {showInstructions && <div dangerouslySetInnerHTML={{__html: settingsData[0][26]}} />}
+                {showInstructions && <div dangerouslySetInnerHTML={{__html: props.settingsData[0][26]}} />}
             </section>
             <section className={styles.confirm}>
                 <label htmlFor="confirm"><input type="checkbox" onChange={checkBoxStatus} name="" id="confirm" />I have read and understood the instructions</label>

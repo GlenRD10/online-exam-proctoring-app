@@ -27,7 +27,7 @@ export default function WebcamCap (props) {
             exam_id: props.examData.exam_id,
             scheduler_id: props.examData.scheduler_id,
             roll_number: props.examData.roll_number,
-            student_photo_image: '',
+            student_photo_image: imgSrc.slice(23),
             ip: localStorage.getItem('ipv4')
         };
 
@@ -40,13 +40,14 @@ export default function WebcamCap (props) {
         }
 
         try {
+            // eslint-disable-next-line no-unused-vars
             const res = await axios({
                 method: 'post',
                 url: url + 'student_exam_photo_save',
                 crossDomain: true,
                 data,
                 headers
-            })
+            });
         } catch (e) {
             console.log(e.response);
         }
@@ -55,25 +56,18 @@ export default function WebcamCap (props) {
     React.useEffect(() => {
         let interval;
         if (captureImg) {
-            interval = setInterval(capture, 10000);
+            interval = setInterval(capture, props.sendImgTimer * 1000);
         } else {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [captureImg, capture]);
 
-    // React.useEffect(() => {
-    //     sendImage();
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [imgSrc]);
-
-    // const captureimg = setInterval(() => {
-    //     capture();
-    // }, 10000);
-
-    // const endcapture = () => {
-    //     clearInterval(captureimg);
-    // }
+    React.useEffect(() => {
+        sendImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [imgSrc]);
 
     const navigate = useNavigate();
     const mediaErrorHandler = () => {

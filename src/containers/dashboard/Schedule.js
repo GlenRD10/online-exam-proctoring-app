@@ -8,11 +8,11 @@ export default function Schedule (props) {
     const filteredArray = props.examData.filter((item, index) => {
         if (item[13] === 'Start Exam' || item[13] === 'Resume Exam')
             item[13] = 'ongoing';
-        else if (item[13] === 'Exam Allocated')
+        else if (item[13] === 'Exam Scheduled')
             item[13] = 'yet-to-start';
         else if (item[13] === 'Exam Expired')
             item[13] = 'expired';
-        else if (item[13] === 'Completed')
+        else if (item[13] === 'Exam Completed')
             item[13] = 'completed';
         if(props.filter === 'all') 
             return index !== props.examData.length - 1;
