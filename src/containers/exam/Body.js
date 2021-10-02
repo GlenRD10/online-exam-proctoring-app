@@ -88,7 +88,7 @@ export default function Body (props) {
       }, [isActive, props.questionTimer]);
 
     useEffect(() => {
-        console.log(props.questionTimer);
+        // console.log(props.questionTimer);
         props.setQuestionTimer(0);
         setIsActive(false);
 
@@ -121,7 +121,7 @@ export default function Body (props) {
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
             const questionAttemptData = xml.documentElement.firstChild.data
-            console.log(questionAttemptData)
+            // console.log(questionAttemptData)
             if(questionAttemptData[0] === '~') {
                 if(questionAttemptData[1] === 'y') {
                     props.setReviewStatusFun(true);

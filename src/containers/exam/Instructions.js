@@ -11,7 +11,7 @@ export default function Instructions (props) {
 
     function checkBoxStatus() {
         setCheckBox(true);
-        console.log(checkBox);
+        // console.log(checkBox);
     }
 
     let data = {
@@ -66,8 +66,9 @@ export default function Instructions (props) {
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
+            // eslint-disable-next-line no-unused-vars
             const statusReport = xml.querySelector('string').textContent.split('~');
-            console.log(statusReport)
+            // console.log(statusReport)
 
         } catch(e) {
             console.log(e.response);
@@ -113,7 +114,7 @@ export default function Instructions (props) {
             const backendData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
             props.setSettingsData(backendData);
             setShowInstructions(true);
-            console.log(backendData);
+            // console.log(backendData);
             props.setAllowReview(backendData[0][0] === 'y' ? true : false);
             props.setAllowMultiLang(backendData[0][13] === 'y' ? true : false);
             props.setAllowNavigation(backendData[0][10] === 'n' ? false : true);

@@ -122,9 +122,9 @@ export default function Main () {
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
-            console.log(xml);
+            // console.log(xml);
             const questionData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
-            console.log(questionData);
+            // console.log(questionData);
             
             let btnColors = [];
             let legendCount = [0,0,0,0];
@@ -228,7 +228,7 @@ export default function Main () {
 
     async function saveAnswer() {
         answerData.elapsed_time_seconds = questionTimer;
-        console.log(answerData);
+        // console.log(answerData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
@@ -249,8 +249,9 @@ export default function Main () {
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
+            // eslint-disable-next-line no-unused-vars
             const questionAttemptData = xml.documentElement.firstChild.data
-            console.log(questionAttemptData[0])
+            // console.log(questionAttemptData[0])
 
         } catch(e) {
             console.log(e.response);
@@ -369,7 +370,7 @@ export default function Main () {
             student_end_exam: endExamState
         }
 
-        console.log(endTheExamData);
+        // console.log(endTheExamData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
@@ -389,8 +390,9 @@ export default function Main () {
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
+            // eslint-disable-next-line no-unused-vars
             const endExamStatus = xml.documentElement.firstChild.data
-            console.log(endExamStatus);
+            // console.log(endExamStatus);
 
         } catch(e) {
             console.log(e.response);
@@ -421,18 +423,19 @@ export default function Main () {
         let str = await readSwitchWindow(); // Doesn't do anything, just console logs the window switch status
         saveSwitchWindow();
         const myArr = str.toString().split('~'); 
-        console.log(myArr[1]);  
-        if(proctoringEnabled) {
+        // console.log(myArr[1]);  
             if(myArr[0] <= myArr[1]) {
-                setEndExamState('s');
-                endTheExam();
+                if(proctoringEnabled) {
+                    setEndExamState('s');
+                    endTheExam();
+                }
                 navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
                 alert('You have exceeded the maximum window switches that were allowed!');
             } else {
                 navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
                 alert('You have Quit the Exam!');
             }
-        }    
+ 
         
     }
 
@@ -460,7 +463,7 @@ export default function Main () {
     useEffect(() => {
         const handleEsc = (event) => {
            if (event.keyCode === 27) {
-            console.log(answerData);
+            // console.log(answerData);
           }
         };
         window.addEventListener('keydown', handleEsc);
@@ -503,8 +506,9 @@ export default function Main () {
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
+            // eslint-disable-next-line no-unused-vars
             const endExamStatus = xml.documentElement.firstChild.data
-            console.log(endExamStatus);
+            // console.log(endExamStatus);
 
         } catch(e) {
             console.log(e.response);
@@ -568,7 +572,6 @@ export default function Main () {
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
             const windowSwitchStatus = xml.documentElement.firstChild.data
-            console.log(typeof windowSwitchStatus);
             return windowSwitchStatus;
 
         } catch(e) {
@@ -588,7 +591,7 @@ export default function Main () {
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
                         {showBody && <Body countDown={countDown} allowReview={allowReview} endTheExam={endTheExam} legendCtn={legendCtn} showSubmitDialog={showSubmitDialog} setShowSubmitDialog={setShowSubmitDialog} setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer setShowSubmitDialog={setShowSubmitDialog} endTheExam={endTheExam} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                            {showFooter && <Footer seperateTimer={seperateTimer} setShowSubmitDialog={setShowSubmitDialog} endTheExam={endTheExam} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
                         </div>
                         <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
                             {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
