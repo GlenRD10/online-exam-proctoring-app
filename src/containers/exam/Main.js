@@ -19,6 +19,8 @@ export default function Main () {
     const [maxSwitchWindow, setMaxSwitchWindow] = useState(999);
     const [endExamState, setEndExamState] = useState('y');
 
+    // const [seperateTimerEnd, setSeperateTimerEnd] = useState(false);
+
     const location = useLocation();
     const time_remaining = location.state.examData[12];
 
@@ -234,7 +236,7 @@ export default function Main () {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
 
-        answerData = Object.keys(answerData).map((key) => {
+        const answerDataUri = Object.keys(answerData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(answerData[key]);
         }).join('&');
         const headers = {
@@ -245,7 +247,7 @@ export default function Main () {
                 method: 'post',
                 url: url + 'student_exam_question_answer_save',                           
                 crossDomain: true,
-                data: answerData,
+                data: answerDataUri,
                 headers
             });
             const parser = new DOMParser();
@@ -415,7 +417,7 @@ export default function Main () {
         setSwitchWindow(switchWindow + 1);
         if(switchWindow === maxSwitchWindow) {
             setEndExamState('s');
-            endTheExam();
+            // endTheExam();
             navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
             alert('You have exceeded the maximum window switches that were allowed!');
         } else {
@@ -501,13 +503,17 @@ export default function Main () {
     }
 
     const countDown = (remTime) => {
-        let interval = setInterval(() => {
+        let mainInterval = setInterval(() => {
+            // if(seperateTimerEnd) {
+            //     clearInterval(mainInterval);
+            //     setSeperateTimerEnd(false);
+            // }
             if(remTime.min < reminder && remTime.hr === 0) {
                 setReminderStatus(true);
             }
             if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
-                clearInterval(interval);
-                endTheExam();
+                clearInterval(mainInterval);
+                // endTheExam();
             } else {
                 if (remTime.sec > 0) remTime.sec -= 1;
                 else {
@@ -562,7 +568,7 @@ export default function Main () {
 
     return (
         <div>
-            {showInstructions && <Instructions seperateTimer={seperateTimer} seperateTimerInSecomds={seperateTimerInSeconds} settingsData={settingsData} setSettingsData={setSettingsData} setMaxSwitchWindow={setMaxSwitchWindow} setProctoringEnabled={setProctoringEnabled} setSendImgTimer={setSendImgTimer} setSwitchWindow={setSwitchWindow} setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
+            {showInstructions && <Instructions seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} settingsData={settingsData} setSettingsData={setSettingsData} setMaxSwitchWindow={setMaxSwitchWindow} setProctoringEnabled={setProctoringEnabled} setSendImgTimer={setSendImgTimer} setSwitchWindow={setSwitchWindow} setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
             {(!showInstructions && proctoringEnabled) && <WebcamCap sendImgTimer={sendImgTimer} examData={data} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>

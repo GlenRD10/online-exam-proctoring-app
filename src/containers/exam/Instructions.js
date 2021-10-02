@@ -37,6 +37,7 @@ export default function Instructions (props) {
             let min = Math.trunc((props.seperateTimerInSeconds % 3600) / 60);
             let sec = Math.trunc(props.seperateTimerInSeconds % 60)
             props.countDown({hr, min, sec})
+            //Implement the seperate timer
         } else {
             let hr = Math.trunc(props.timeRemaining / 3600);
             let min = Math.trunc((props.timeRemaining % 3600) / 60);

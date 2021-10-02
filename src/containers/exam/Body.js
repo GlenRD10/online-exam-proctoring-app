@@ -64,7 +64,6 @@ export default function Body (props) {
             let min = Math.trunc((props.seperateTimerInSeconds % 3600) / 60);
             let sec = Math.trunc(props.seperateTimerInSeconds % 60)
             props.countDown({hr, min, sec});
-            console.log("Inside the Timer");
             props.setIndexValue('next');
         }
         if (isActive) {
@@ -79,10 +78,6 @@ export default function Body (props) {
       }, [isActive, props.questionTimer]);
 
     useEffect(() => {
-        // props.elapsedTime = 0;
-        // console.log(props.elapsedTime);
-        // console.log("before true");
-        // elapsedTimer(true);
         console.log(props.questionTimer);
         props.setQuestionTimer(0);
         setIsActive(false);
