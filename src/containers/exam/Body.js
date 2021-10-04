@@ -163,6 +163,9 @@ export default function Body (props) {
     let img1 = Buffer.from(props.questionList[props.index][24], "base64").toString();
     // let img2 = Buffer.from(props.questionList[props.index][25], "base64").toString();
 
+    function doNothing() {
+
+    }
     
     
     return (
@@ -195,7 +198,7 @@ export default function Body (props) {
                     <li>
                         <label htmlFor="opt1"><input type="radio" name="ans" id={props.questionList[props.index][27][0].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][0].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][15] : props.questionList[props.index][20]}</label>
                     </li>
-                    <li>
+                    <li> 
                         <label htmlFor="opt2"><input type="radio" name="ans" id={props.questionList[props.index][27][2].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][2].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][16] : props.questionList[props.index][21]}</label>
                     </li>
                     {props.questionList[props.index][17] && <li>

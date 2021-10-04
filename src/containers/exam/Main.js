@@ -526,8 +526,17 @@ export default function Main () {
                 setReminderStatus(true);
             }
             if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
-                clearInterval(mainInterval);
-                // endTheExam();
+                console.log(index +" "+ questionList.length +" "+ seperateTimer);
+                if((seperateTimer && index === questionList.length - 2) || !seperateTimer) {
+                    console.log("Ending exam");
+                    endTheExam();
+                    navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+                    alert('You have finished the Exam!');
+                    clearInterval(mainInterval);
+                }
+                else {
+                    clearInterval(mainInterval);
+                }
             } else {
                 if (remTime.sec > 0) remTime.sec -= 1;
                 else {
