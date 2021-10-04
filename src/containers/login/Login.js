@@ -47,6 +47,7 @@ export default function Login () {
           localStorage.setItem('user_name', message[2]);
           localStorage.setItem('user_id', message[3]);
           localStorage.setItem('ipv4', ipv4);
+          localStorage.setItem('exam_session', 'SUMMER-2021');
           navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
         }
         else {
@@ -63,7 +64,7 @@ export default function Login () {
             <form className={styles.form} onSubmit={handleSubmit}>
                 <input type="text" name="userid" id="" placeholder="User ID" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 <input type="password" name="password" id="" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <a href="https://www.google.com">Forgot Password?</a>
+                {/* <a href="https://www.google.com">Forgot Password?</a> */}
                 {/* <div className={styles.captcha}>
                   <ReCAPTCHA
                     sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"

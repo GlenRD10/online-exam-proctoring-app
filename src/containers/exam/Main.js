@@ -92,7 +92,7 @@ export default function Main () {
     const roll_number = location.state.examData[6];
 
     let data = {
-        exam_session: 'SUMMER-2021',
+        exam_session: localStorage.getItem('exam_session'),
         user_id: location.state.user_id,
         user_ses_id: location.state.session_id,
         exam_code: exam_code,
@@ -133,7 +133,7 @@ export default function Main () {
 
 
                 let data = {
-                    exam_session: 'SUMMER-2021',
+                    exam_session: localStorage.getItem('exam_session'),
                     user_id: localStorage.getItem('user_id'),
                     user_ses_id: localStorage.getItem('session_id'),
                     exam_code: exam_code,
@@ -211,7 +211,7 @@ export default function Main () {
     }
 
     let answerData = {
-        exam_session: 'SUMMER-2021',
+        exam_session: localStorage.getItem('exam_session'),
         user_id: location.state.user_id,
         user_ses_id: location.state.session_id,
         exam_code: exam_code,
@@ -358,7 +358,7 @@ export default function Main () {
 
     async function endTheExam() {
         let endTheExamData = {
-            exam_session: 'SUMMER-2021',
+            exam_session: localStorage.getItem('exam_session'),
             user_id: location.state.user_id,
             user_ses_id: location.state.session_id,
             exam_code: exam_code,
@@ -475,7 +475,7 @@ export default function Main () {
       }, []);
 
     let switchDataMain = {
-        exam_session: 'SUMMER-2021',
+        exam_session: localStorage.getItem('exam_session'),
         user_id: location.state.user_id,
         user_ses_id: location.state.session_id,
         exam_code: exam_code,

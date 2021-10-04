@@ -15,7 +15,7 @@ export default function Dashboard (props) {
 
     const location = useLocation();
     let data = {
-        exam_session: 'SUMMER-2021',
+        exam_session: localStorage.getItem('exam_session'),
         user_id: location.state.user_id,
         user_ses_id: location.state.session_id
     }

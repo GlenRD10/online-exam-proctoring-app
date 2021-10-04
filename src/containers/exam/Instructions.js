@@ -139,7 +139,7 @@ export default function Instructions (props) {
 
     return (
         <div className={styles.container}>
-            <h2>Exam Name Goes Here</h2>
+            <h2>Instructions</h2>
             <section className={styles.instruction}>
                 {showInstructions && <div dangerouslySetInnerHTML={{__html: props.settingsData[0][26]}} />}
             </section>

@@ -19,7 +19,7 @@ export default function WebcamCap (props) {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
 
         let data = {
-            exam_session: 'SUMMER-2021',
+            exam_session: localStorage.getItem('exam_session'),
             user_id: props.examData.user_id,
             user_ses_id: props.examData.user_ses_id,
             exam_code: props.examData.exam_code,
@@ -48,6 +48,7 @@ export default function WebcamCap (props) {
                 data,
                 headers
             });
+            console.log(res);
         } catch (e) {
             console.log(e.response);
         }

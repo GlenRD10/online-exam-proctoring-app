@@ -54,7 +54,7 @@ export default function Body (props) {
     // console.log(props.index)
 
     let data = {
-        exam_session: 'SUMMER-2021',
+        exam_session: localStorage.getItem('exam_session'),
         user_id: localStorage.getItem('user_id'),
         user_ses_id: localStorage.getItem('session_id'),
         exam_code: props.exam_code,

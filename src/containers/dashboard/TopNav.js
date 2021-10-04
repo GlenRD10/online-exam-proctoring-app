@@ -23,8 +23,9 @@ export default function TopNav (props) {
         localStorage.removeItem('user_name');
         localStorage.removeItem('user_id');
         localStorage.removeItem('ipv4');
+        localStorage.removeItem('exam_session');
         logout();
-        history("/login")
+        history("/")
     }
 
     async function logout() {
