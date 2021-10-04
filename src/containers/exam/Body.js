@@ -75,6 +75,9 @@ export default function Body (props) {
             let sec = Math.trunc(props.seperateTimerInSeconds % 60)
             props.countDown({hr, min, sec});
             props.setIndexValue('next');
+            if(props.index === props.questionList.lenngth - 2) {
+                return 0;
+            }
         }
         if (isActive) {
           interval = setInterval(() => {
@@ -162,11 +165,6 @@ export default function Body (props) {
 
     let img1 = Buffer.from(props.questionList[props.index][24], "base64").toString();
     // let img2 = Buffer.from(props.questionList[props.index][25], "base64").toString();
-
-    function doNothing() {
-
-    }
-    
     
     return (
         <div className={styles.body}>

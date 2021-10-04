@@ -370,7 +370,7 @@ export default function Main () {
             student_end_exam: endExamState
         }
 
-        // console.log(endTheExamData);
+        console.log(endTheExamData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         
@@ -392,7 +392,7 @@ export default function Main () {
             const xml = parser.parseFromString(res.data, 'text/xml');
             // eslint-disable-next-line no-unused-vars
             const endExamStatus = xml.documentElement.firstChild.data
-            // console.log(endExamStatus);
+            console.log(endExamStatus);
 
         } catch(e) {
             console.log(e.response);
@@ -433,7 +433,7 @@ export default function Main () {
                 alert('You have exceeded the maximum window switches that were allowed!');
             } else {
                 navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-                alert('You have Quit the Exam!');
+                alert('You Exam has ended!');
             }
  
         
@@ -531,7 +531,6 @@ export default function Main () {
                     console.log("Ending exam");
                     endTheExam();
                     navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-                    alert('You have finished the Exam!');
                     clearInterval(mainInterval);
                 }
                 else {
