@@ -43,16 +43,22 @@ body {
   margin-bottom: 20px;
 }
 
-.confirm button {
+.btns {
+  display: flex;
+  justify-content: center;
+}
+
+.btns button {
   display: block;
-  margin: 20px auto;
+  margin: 20px;
+  width: 150px;
   padding: 15px 30px;
   transition: 0.3s;
   font-size: 0.95em;
   border: 1px solid rgb(175, 0, 0);
 }
 
-.confirm button:hover {
+.btns button:hover {
   transform: translateY(-2px);
   background-color: rgb(49, 185, 49);
   border-color: black;

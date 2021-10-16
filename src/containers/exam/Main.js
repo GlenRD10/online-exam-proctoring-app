@@ -7,13 +7,13 @@ import Instructions from './Instructions';
 import LanguageBar from './LanguageBar';
 import WebcamCap from './WebcamCap';
 import styles from './main.module.css'
-import { useEffect , useState} from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Main () {
+export default function Main() {
     const [endExamState, setEndExamState] = useState('y');
 
     // const [seperateTimerEnd, setSeperateTimerEnd] = useState(false);
@@ -34,7 +34,7 @@ export default function Main () {
 
     const [index, setIndex] = useState(0);
     const [questionList, setQuestionList] = useState([]);
-    
+
     const [timer, setTimer] = useState(hr + ':' + min + ':' + sec);
     const [questionTimer, setQuestionTimer] = useState(0);
     const [showNav, setShowNav] = useState(false);
@@ -54,9 +54,9 @@ export default function Main () {
     const [legendCtn, setLegendCtn] = useState([]);
 
     //Settings Parameters 
-    const[allowMultiLang, setAllowMultiLang] = useState(false);
-    const[primaryLang, setPrimaryLang] = useState('');
-    const[secondaryLang, setSecondaryLang] = useState('');
+    const [allowMultiLang, setAllowMultiLang] = useState(false);
+    const [primaryLang, setPrimaryLang] = useState('');
+    const [secondaryLang, setSecondaryLang] = useState('');
     const [languageChosen, setLanguageChosen] = useState(primaryLang !== '' ? primaryLang : '');
     const [allowReview, setAllowReview] = useState(false);
 
@@ -104,7 +104,7 @@ export default function Main () {
 
     async function SendPostRequest() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
 
         data = Object.keys(data).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -115,7 +115,7 @@ export default function Main () {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'get_student_exam_schedule_questions_list',                           
+                url: url + 'get_student_exam_schedule_questions_list',
                 crossDomain: true,
                 data: data,
                 headers
@@ -125,11 +125,11 @@ export default function Main () {
             // console.log(xml);
             const questionData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
             // console.log(questionData);
-            
-            let btnColors = [];
-            let legendCount = [0,0,0,0];
 
-            for (let i=0; i<questionData.length-1; i++) {
+            let btnColors = [];
+            let legendCount = [0, 0, 0, 0];
+
+            for (let i = 0; i < questionData.length - 1; i++) {
 
 
                 let data = {
@@ -146,7 +146,7 @@ export default function Main () {
                 }
 
                 const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
 
                 data = Object.keys(data).map((key) => {
                     return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -157,7 +157,7 @@ export default function Main () {
                 try {
                     const res = await axios({
                         method: 'post',
-                        url: url + 'student_exam_question_answer_read',                           
+                        url: url + 'student_exam_question_answer_read',
                         crossDomain: true,
                         data: data,
                         headers
@@ -166,8 +166,8 @@ export default function Main () {
                     const xml = parser.parseFromString(res.data, 'text/xml');
                     const questionAttemptData = xml.documentElement.firstChild.data
 
-                    if(questionAttemptData[0] === '~') {
-                        if(questionAttemptData[1] === 'y') {
+                    if (questionAttemptData[0] === '~') {
+                        if (questionAttemptData[1] === 'y') {
                             btnColors.push('brown');
                             legendCount[3] += 1;
                         }
@@ -176,7 +176,7 @@ export default function Main () {
                             legendCount[1] += 1;
                         }
                     } else {
-                        if(questionAttemptData[2] === 'y') {
+                        if (questionAttemptData[2] === 'y') {
                             btnColors.push('orange');
                             legendCount[2] += 1;
                         } else {
@@ -184,9 +184,9 @@ export default function Main () {
                             legendCount[0] += 1;
                         }
                     }
-                    
 
-                } catch(e) {
+
+                } catch (e) {
                     console.log(e.response);
                 }
 
@@ -199,8 +199,8 @@ export default function Main () {
             setShowBody(true);
             setShowFooter(true);
             setShowSidebar(true);
-            
-        } catch(e) {
+
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -231,7 +231,7 @@ export default function Main () {
         // console.log(answerData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
 
         const answerDataUri = Object.keys(answerData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(answerData[key]);
@@ -242,7 +242,7 @@ export default function Main () {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'student_exam_question_answer_save',                           
+                url: url + 'student_exam_question_answer_save',
                 crossDomain: true,
                 data: answerDataUri,
                 headers
@@ -253,11 +253,11 @@ export default function Main () {
             const questionAttemptData = xml.documentElement.firstChild.data
             // console.log(questionAttemptData[0])
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 
-    }   
+    }
 
     // const [backPressed, setBackPressed] = useState(false);
     const navigate = useNavigate();
@@ -284,10 +284,10 @@ export default function Main () {
         //logic for showing popup warning on page refresh
         window.onbeforeunload = function () {
 
-        return "Data will be lost if you leave the page, are you sure?";
+            return "Data will be lost if you leave the page, are you sure?";
         };
         return () => {
-        window.removeEventListener('popstate', onBackButtonEvent);
+            window.removeEventListener('popstate', onBackButtonEvent);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -300,7 +300,7 @@ export default function Main () {
             if (window.confirm("Are you sure you wanna Quit the Exam?")) {
                 setBackbuttonPress(true)
                 setIndexValue('next');
-                navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+                navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
             } else {
                 window.history.pushState(null, null, window.location.pathname);
                 setBackbuttonPress(false)
@@ -310,15 +310,15 @@ export default function Main () {
 
     function setIndexValue(value) {
         let tempArray = buttonColors;
-        let tempcount = [0,0,0,0];
+        let tempcount = [0, 0, 0, 0];
 
-        if(reviewStatus && answerValue !== '') {
+        if (reviewStatus && answerValue !== '') {
             //Update array for color yellow
             tempArray[index] = 'orange'
-        } else if(reviewStatus && answerValue === '') {
+        } else if (reviewStatus && answerValue === '') {
             //Update array for color red
             tempArray[index] = 'brown'
-        } else if(!reviewStatus && answerValue !== '') {
+        } else if (!reviewStatus && answerValue !== '') {
             //Update array for color green
             tempArray[index] = 'green'
         } else {
@@ -326,28 +326,28 @@ export default function Main () {
             tempArray[index] = '#9ad1d4'
         }
 
-        tempArray.forEach((v,i) => {
-            if(v === 'green') tempcount[0] += 1;
-            else if(v === 'orange') tempcount[2] += 1;
-            else if(v === 'brown') tempcount[3] += 1;
+        tempArray.forEach((v, i) => {
+            if (v === 'green') tempcount[0] += 1;
+            else if (v === 'orange') tempcount[2] += 1;
+            else if (v === 'brown') tempcount[3] += 1;
             else tempcount[1] += 1;
         });
 
         setLegendCtn(tempcount);
 
-        if(index !== 0 && value === 'previous') {
-            setIndex(index-1);
+        if (index !== 0 && value === 'previous') {
+            setIndex(index - 1);
         }
-        else if(index === 0 && value === 'previous') {
-            setIndex(questionList.length-2);
+        else if (index === 0 && value === 'previous') {
+            setIndex(questionList.length - 2);
         }
-        else if(index !== questionList.length-2 && value === 'next') {
-            setIndex(index+1);
+        else if (index !== questionList.length - 2 && value === 'next') {
+            setIndex(index + 1);
         }
-        else if(index === questionList.length-2 && value === 'next' && !allowNavigation) {
+        else if (index === questionList.length - 2 && value === 'next' && !allowNavigation) {
 
         }
-        else if(index === questionList.length-2 && value === 'next') {
+        else if (index === questionList.length - 2 && value === 'next') {
             setIndex(0);
         }
         else {
@@ -373,7 +373,7 @@ export default function Main () {
         console.log(endTheExamData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
         endTheExamData = Object.keys(endTheExamData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(endTheExamData[key]);
         }).join('&');
@@ -383,7 +383,7 @@ export default function Main () {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'student_exam_complete',                           
+                url: url + 'student_exam_complete',
                 crossDomain: true,
                 data: endTheExamData,
                 headers
@@ -394,7 +394,7 @@ export default function Main () {
             const endExamStatus = xml.documentElement.firstChild.data
             console.log(endExamStatus);
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -417,26 +417,26 @@ export default function Main () {
 
     const handle = useFullScreenHandle();
 
-    const exitHandler = async () =>  {
+    const exitHandler = async () => {
         // saveAnswer();
         //Fix the save answer state
         let str = await readSwitchWindow(); // Doesn't do anything, just console logs the window switch status
         saveSwitchWindow();
-        const myArr = str.toString().split('~'); 
+        const myArr = str.toString().split('~');
         // console.log(myArr[1]);  
-            if(myArr[0] <= myArr[1]) {
-                if(proctoringEnabled) {
-                    setEndExamState('s');
-                    endTheExam();
-                }
-                navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-                alert('You have exceeded the maximum window switches that were allowed!');
-            } else {
-                navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
-                alert('You Exam has ended!');
+        if (myArr[0] <= myArr[1]) {
+            if (proctoringEnabled) {
+                setEndExamState('s');
+                endTheExam();
             }
- 
-        
+            navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
+            alert('You have exceeded the maximum window switches that were allowed!');
+        } else {
+            navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
+            alert('You Exam has ended!');
+        }
+
+
     }
 
     const exitHandlerExec = () => {
@@ -457,22 +457,22 @@ export default function Main () {
             document.removeEventListener('MSFullscreenChange', exitHandlerExec, false);
             document.removeEventListener('webkitfullscreenchange', exitHandlerExec, false);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [] );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const handleEsc = (event) => {
-           if (event.keyCode === 27) {
-            // console.log(answerData);
-          }
+            if (event.keyCode === 27) {
+                // console.log(answerData);
+            }
         };
         window.addEventListener('keydown', handleEsc);
-    
+
         return () => {
-          window.removeEventListener('keydown', handleEsc);
+            window.removeEventListener('keydown', handleEsc);
         };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     let switchDataMain = {
         exam_session: localStorage.getItem('exam_session'),
@@ -489,7 +489,7 @@ export default function Main () {
     async function saveSwitchWindow() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         let switchData = switchDataMain;
-        
+
         switchData = Object.keys(switchData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(switchData[key]);
         }).join('&');
@@ -499,7 +499,7 @@ export default function Main () {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'student_exam_switch_window_save',                           
+                url: url + 'student_exam_switch_window_save',
                 crossDomain: true,
                 data: switchData,
                 headers
@@ -510,7 +510,7 @@ export default function Main () {
             const endExamStatus = xml.documentElement.firstChild.data
             // console.log(endExamStatus);
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -522,15 +522,15 @@ export default function Main () {
             //     clearInterval(mainInterval);
             //     setSeperateTimerEnd(false);
             // }
-            if(remTime.min < reminder && remTime.hr === 0) {
+            if (remTime.min < reminder && remTime.hr === 0) {
                 setReminderStatus(true);
             }
             if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
-                console.log(index +" "+ questionList.length +" "+ seperateTimer);
-                if((seperateTimer && index === questionList.length - 2) || !seperateTimer) {
+                console.log(index + " " + questionList.length + " " + seperateTimer);
+                if ((seperateTimer && index === questionList.length - 2) || !seperateTimer) {
                     console.log("Ending exam");
                     endTheExam();
-                    navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+                    navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
                     clearInterval(mainInterval);
                 }
                 else {
@@ -562,7 +562,7 @@ export default function Main () {
     async function readSwitchWindow() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
         let switchData = switchDataMain;
-        
+
         switchData = Object.keys(switchData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(switchData[key]);
         }).join('&');
@@ -572,7 +572,7 @@ export default function Main () {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'student_exam_switch_window_read',                           
+                url: url + 'student_exam_switch_window_read',
                 crossDomain: true,
                 data: switchData,
                 headers
@@ -582,7 +582,7 @@ export default function Main () {
             const windowSwitchStatus = xml.documentElement.firstChild.data
             return windowSwitchStatus;
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -594,15 +594,15 @@ export default function Main () {
             {(!showInstructions && proctoringEnabled) && <WebcamCap sendImgTimer={sendImgTimer} examData={data} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
-                    {showNav && <Navbar reminderStatus={reminderStatus} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
-                    <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage}/>
+                    {showNav && <Navbar title={location.state.examData[1]} reminderStatus={reminderStatus} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} timer={timer} />}
+                    <LanguageBar sidebarVisibility={sidebarVisibility} setsidebarVisibility={setsidebarVisibility} allowMultiLang={allowMultiLang} primaryLang={primaryLang} secondaryLang={secondaryLang} languageChosen={languageChosen} setLanguage={setLanguage} />
                     <div className={styles.main}>
                         <div className={styles.bodyAndFooter}>
-                        {showBody && <Body countDown={countDown} allowReview={allowReview} endTheExam={endTheExam} legendCtn={legendCtn} showSubmitDialog={showSubmitDialog} setShowSubmitDialog={setShowSubmitDialog} setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number}/>}
-                            {showFooter && <Footer seperateTimer={seperateTimer} setShowSubmitDialog={setShowSubmitDialog} endTheExam={endTheExam} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus}/>}
+                            {showBody && <Body countDown={countDown} allowReview={allowReview} endTheExam={endTheExam} legendCtn={legendCtn} showSubmitDialog={showSubmitDialog} setShowSubmitDialog={setShowSubmitDialog} setIndexValue={setIndexValue} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} questionTimer={questionTimer} setQuestionTimer={setQuestionTimer} primaryLang={primaryLang} setFooterFun={setFooterFun} setReviewStatusFun={setReviewStatusFun} answerValue={answerValue} updateAnswerValue={updateAnswerValue} questionList={questionList} index={index} languageChosen={languageChosen} exam_code={data.exam_code} subject_code={data.subject_code} exam_id={data.exam_id} scheduler_id={data.scheduler_id} roll_number={data.roll_number} />}
+                            {showFooter && <Footer seperateTimer={seperateTimer} setShowSubmitDialog={setShowSubmitDialog} endTheExam={endTheExam} index={index} questionList={questionList} allowNavigation={allowNavigation} clearOptions={clearOptions} allowReview={allowReview} reviewStatus={reviewStatus} setIndexValue={setIndexValue} toggleReviewStatus={toggleReviewStatus} />}
                         </div>
                         <div className={`${styles.sidebar} ${sidebarVisibility ? styles.showSidebar : styles.notShowSidebar}`}>
-                            {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList}/>}
+                            {showSidebar && <Sidebar allowNavigation={allowNavigation} allowReview={allowReview} legendCtn={legendCtn} buttonColors={buttonColors} setIndexValue={setIndexValue} questionList={questionList} />}
                         </div>
                     </div>
 

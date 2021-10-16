@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 // import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import styles from './instructions.module.css';
 
-export default function Instructions (props) {
-    
+export default function Instructions(props) {
+
     const [showInstructions, setShowInstructions] = useState(false);
     // const handle = useFullScreenHandle();
     const [checkBox, setCheckBox] = useState(false);
 
+    const navigate = useNavigate();
+
     function checkBoxStatus() {
-        setCheckBox(true);
+        if (!checkBox) setCheckBox(true);
+        else setCheckBox(false)
         // console.log(checkBox);
     }
 
@@ -28,27 +32,27 @@ export default function Instructions (props) {
 
     const btnHandler = () => {
         startExam();
-        
+
         props.setShowDiv(true);
         props.setShowInstructions(false);
         props.handle.enter();
-        if(props.seperateTimer) {
+        if (props.seperateTimer) {
             let hr = Math.trunc(props.seperateTimerInSeconds / 3600);
             let min = Math.trunc((props.seperateTimerInSeconds % 3600) / 60);
             let sec = Math.trunc(props.seperateTimerInSeconds % 60)
-            props.countDown({hr, min, sec})
+            props.countDown({ hr, min, sec })
             //Implement the seperate timer
         } else {
             let hr = Math.trunc(props.timeRemaining / 3600);
             let min = Math.trunc((props.timeRemaining % 3600) / 60);
             let sec = Math.trunc(props.timeRemaining % 60)
-            props.countDown({hr, min, sec})
+            props.countDown({ hr, min, sec })
         }
-   }
+    }
 
-   async function startExam() {
+    async function startExam() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
 
         data = Object.keys(data).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -59,7 +63,7 @@ export default function Instructions (props) {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'student_exam_start',                           
+                url: url + 'student_exam_start',
                 crossDomain: true,
                 data: data,
                 headers
@@ -70,7 +74,7 @@ export default function Instructions (props) {
             const statusReport = xml.querySelector('string').textContent.split('~');
             // console.log(statusReport)
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -94,7 +98,7 @@ export default function Instructions (props) {
 
     async function getInstructions() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
         postData = Object.keys(postData).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
         }).join('&');
@@ -104,7 +108,7 @@ export default function Instructions (props) {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'get_student_exam_schedule_settings_list ',                           
+                url: url + 'get_student_exam_schedule_settings_list ',
                 crossDomain: true,
                 data: postData,
                 headers
@@ -122,16 +126,16 @@ export default function Instructions (props) {
             props.setSecondaryLang(backendData[0][15]);
             props.setLanguageChosen(backendData[0][14]);
             props.setReminder(backendData[0][21]);
-            if(backendData[0][5] === 'y') {
+            if (backendData[0][5] === 'y') {
                 props.setSeperateTimer(true);
                 props.setSeperateTimerInSeconds(backendData[0][6]);
             }
             // eslint-disable-next-line eqeqeq
-            if(backendData[0][31] != 0) props.setProctoringEnabled(true);
+            if (backendData[0][31] != 0) props.setProctoringEnabled(true);
             props.setSendImgTimer(backendData[0][31]);
-            
 
-        } catch(e) {
+
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -141,11 +145,14 @@ export default function Instructions (props) {
         <div className={styles.container}>
             <h2>Instructions</h2>
             <section className={styles.instruction}>
-                {showInstructions && <div dangerouslySetInnerHTML={{__html: props.settingsData[0][26]}} />}
+                {showInstructions && <div dangerouslySetInnerHTML={{ __html: props.settingsData[0][26] }} />}
             </section>
             <section className={styles.confirm}>
                 <label htmlFor="confirm"><input type="checkbox" onChange={checkBoxStatus} name="" id="confirm" />I have read and understood the instructions</label>
-                {checkBox && <button onClick={btnHandler}>I am ready to begin</button>}
+                <section className={styles.btns}>
+                    <button onClick={() => navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } })}>Cancel</button>
+                    {checkBox && <button onClick={btnHandler}>Begin</button>}
+                </section>
             </section>
         </div>
     )

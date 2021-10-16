@@ -4,7 +4,7 @@ import styles from './webcamcap.module.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function WebcamCap (props) {
+export default function WebcamCap(props) {
     const webcamRef = React.useRef(null);
     const [imgSrc, setImgSrc] = React.useState(null);
     const [captureImg, setCaptureImg] = React.useState(true);
@@ -53,7 +53,7 @@ export default function WebcamCap (props) {
             console.log(e.response);
         }
     }
-    
+
     React.useEffect(() => {
         let interval;
         if (captureImg) {
@@ -62,17 +62,18 @@ export default function WebcamCap (props) {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [captureImg, capture]);
 
     React.useEffect(() => {
-        if(imgSrc) sendImage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (imgSrc) sendImage();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [imgSrc]);
 
     const navigate = useNavigate();
-    const mediaErrorHandler = () => {
+    const mediaErrorHandler = async () => {
         navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } })
+        alert('Please Enable Camera Access To Begin Exam')
     }
 
     return (
@@ -83,7 +84,7 @@ export default function WebcamCap (props) {
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 width={1280}
-                videoConstraints={{facingMode: 'user'}}
+                videoConstraints={{ facingMode: 'user' }}
                 onUserMediaError={mediaErrorHandler}
             />
             <button onClick={() => setCaptureImg(false)}>Capture</button>

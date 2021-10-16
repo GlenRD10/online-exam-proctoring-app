@@ -2,8 +2,8 @@ import React from 'react';
 import styles from './schedule.module.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function Schedule (props) {
-    let index=0;
+export default function Schedule(props) {
+    let index = 0;
 
     let ongoingState = '';
     const filteredArray = props.examData.filter((item, index) => {
@@ -18,26 +18,26 @@ export default function Schedule (props) {
             item[13] = 'expired';
         else if (item[13] === 'Exam Completed')
             item[13] = 'completed';
-        if(props.filter === 'all') 
+        if (props.filter === 'all')
             return index !== props.examData.length - 1;
         return index !== props.examData.length - 1 && props.filter === item[13];
     })
-    
+
     return (
         <section className={styles.schedule}>
             {filteredArray.map(data => <Card
-            ongoingState={ongoingState}
-            examData={data}
-            key={index++}
-            title={data[1]}
-            status={data[13]} 
-            starts={data[8]} 
-            expires={data[9]} 
-            timezone={data[7]}
-            questions={data[10]}
-            duration={data[11]}
-            timeRemaining={data[12]}
-        />)}
+                ongoingState={ongoingState}
+                examData={data}
+                key={index++}
+                title={data[1]}
+                status={data[13]}
+                starts={data[8]}
+                expires={data[9]}
+                timezone={data[7]}
+                questions={data[10]}
+                duration={data[11]}
+                timeRemaining={data[12]}
+            />)}
         </section>
     );
 }
@@ -50,13 +50,13 @@ const pStyle = {
 const Card = (props) => {
     const navigate = useNavigate();
     function examButtonHandler() {
-        navigate('/main', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id'), examData: props.examData}});
+        navigate('/main', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id'), examData: props.examData } });
     }
 
     let status = props.status;
     let statusTag = null;
     if (status === 'ongoing') {
-        statusTag = <div className={styles.proceedBtn}><button onClick={examButtonHandler}><i className="fa fa-play-circle"></i> { props.ongoingState === 'start' ? 'Start Exam' : 'Resume Exam' }</button></div>;
+        statusTag = <div className={styles.proceedBtn}><button onClick={examButtonHandler}><i className="fa fa-play-circle"></i> {props.ongoingState === 'start' ? 'Start Exam' : 'Resume Exam'}</button></div>;
         status = styles.ongoing;
     }
     else if (status === 'expired') {
@@ -78,10 +78,9 @@ const Card = (props) => {
             <div className={styles.container}>
                 <p>Starts: {props.starts}</p>
                 <p>Expires: {props.expires}</p>
-                <p>Time Zone: {props.timezone}</p>
                 <p>Number of Questions: {props.questions}</p>
-                <p>Test Duration: {props.duration}</p>
-                <p>Time Remaining: {Math.round(props.timeRemaining * 100 / 60) / 100}</p>
+                <p>Test Duration: {props.duration} mins</p>
+                <p>Time Remaining: {Math.round(props.timeRemaining * 100 / 60) / 100} mins</p>
             </div>
             <span className={styles.fadeEffect}></span>
             {statusTag}
