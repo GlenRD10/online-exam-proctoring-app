@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './body.module.css';
 import axios from 'axios';
 import Modal from "react-modal";
@@ -10,7 +10,7 @@ Modal.setAppElement("#root");
 const ImageDialog = (props) => {
     return (
         <div className={styles.dialog}>
-            <img src={"data:image/jpeg;base64," + props.img } style={{display: 'block'}} alt="" />
+            <img src={"data:image/jpeg;base64," + props.img} style={{ display: 'block' }} alt="" />
             <button onClick={() => props.setShowImageDialog(false)}>Close</button>
         </div>
     )
@@ -22,27 +22,27 @@ const SubmitDialog = (props) => {
     const navigate = useNavigate();
     function endExamFnc() {
         props.endTheExam();
-        navigate('/dashboard', { state: {session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id')} });
+        navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
         alert('You have Submitted your exam!');
     }
 
     return (
-        <div style={{width: '50%', left: '25%'}} className={styles.dialog}>
-            <h4 style={{textAlign: 'center', fontSize: '25px'}}>Exam Summary</h4>
+        <div style={{ width: '50%', left: '25%' }} className={styles.dialog}>
+            <h4 style={{ textAlign: 'center', fontSize: '25px' }}>Exam Summary</h4>
             <ul className={styles.legend}>
-                <li><span style={{backgroundColor: 'green'}}>{props.legendCtn[0]}</span> Attempted</li>
-                <li><span style={{backgroundColor: '#9ad1d4'}}>{props.legendCtn[1]}</span> Not Attempted</li>
-                {props.allowReview && <li><span style={{backgroundColor: 'orange'}}>{props.legendCtn[2]}</span> Attempted and Review</li>}
-                {props.allowReview && <li><span style={{backgroundColor: 'brown'}}>{props.legendCtn[3]}</span> Not Attempted and Review</li>}
+                <li><span style={{ backgroundColor: 'green' }}>{props.legendCtn[0]}</span> Attempted</li>
+                <li><span style={{ backgroundColor: '#9ad1d4' }}>{props.legendCtn[1]}</span> Not Attempted</li>
+                {props.allowReview && <li><span style={{ backgroundColor: 'orange' }}>{props.legendCtn[2]}</span> Attempted and Review</li>}
+                {props.allowReview && <li><span style={{ backgroundColor: 'brown' }}>{props.legendCtn[3]}</span> Not Attempted and Review</li>}
             </ul>
             <button onClick={endExamFnc}>Submit</button>
-            <button onClick={() => props.setShowSubmitDialog(false)}>Close</button>
+            {!props.seperateTimer && <button onClick={() => props.setShowSubmitDialog(false)}>Close</button>}
         </div>
-        
+
     )
 }
 
-export default function Body (props) {
+export default function Body(props) {
 
     const [isActive, setIsActive] = useState(false);
 
@@ -69,26 +69,26 @@ export default function Body (props) {
     useEffect(() => {
         let interval = null;
         // eslint-disable-next-line eqeqeq
-        if(props.seperateTimer && props.seperateTimerInSeconds == props.questionTimer) {
+        if (props.seperateTimer && props.seperateTimerInSeconds == props.questionTimer) {
             let hr = Math.trunc(props.seperateTimerInSeconds / 3600);
             let min = Math.trunc((props.seperateTimerInSeconds % 3600) / 60);
             let sec = Math.trunc(props.seperateTimerInSeconds % 60)
-            props.countDown({hr, min, sec});
+            props.countDown({ hr, min, sec });
             props.setIndexValue('next');
-            if(props.index === props.questionList.lenngth - 2) {
+            if (props.index === props.questionList.lenngth - 2) {
                 return 0;
             }
         }
         if (isActive) {
-          interval = setInterval(() => {
-            props.setQuestionTimer(seconds => seconds + 1);
-          }, 1000);
+            interval = setInterval(() => {
+                props.setQuestionTimer(seconds => seconds + 1);
+            }, 1000);
         } else if (!isActive && props.questionTimer !== 0) {
-          clearInterval(interval);
+            clearInterval(interval);
         }
         return () => clearInterval(interval);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [isActive, props.questionTimer]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isActive, props.questionTimer]);
 
     useEffect(() => {
         // console.log(props.questionTimer);
@@ -105,7 +105,7 @@ export default function Body (props) {
 
     async function SendPostRequest() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
 
         data = Object.keys(data).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -116,7 +116,7 @@ export default function Body (props) {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'student_exam_question_answer_read',                           
+                url: url + 'student_exam_question_answer_read',
                 crossDomain: true,
                 data: data,
                 headers
@@ -125,8 +125,8 @@ export default function Body (props) {
             const xml = parser.parseFromString(res.data, 'text/xml');
             const questionAttemptData = xml.documentElement.firstChild.data
             // console.log(questionAttemptData)
-            if(questionAttemptData[0] === '~') {
-                if(questionAttemptData[1] === 'y') {
+            if (questionAttemptData[0] === '~') {
+                if (questionAttemptData[1] === 'y') {
                     props.setReviewStatusFun(true);
                 }
                 else {
@@ -134,7 +134,7 @@ export default function Body (props) {
                 }
                 props.updateAnswerValue('');
             } else {
-                if(questionAttemptData[2] === 'y') {
+                if (questionAttemptData[2] === 'y') {
                     props.setReviewStatusFun(true);
                 }
                 else {
@@ -146,7 +146,7 @@ export default function Body (props) {
             setShowQuestions(true);
             props.setFooterFun(true);
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -165,16 +165,16 @@ export default function Body (props) {
 
     let img1 = Buffer.from(props.questionList[props.index][24], "base64").toString();
     // let img2 = Buffer.from(props.questionList[props.index][25], "base64").toString();
-    
+
     return (
         <div className={styles.body}>
-            
+
             {/* <button style={{float: 'left'}} onClick={btnHandler}>Click me!</button> */}
             {showQuestions && <section className={styles.question}>
-                <h3>Question number {props.index+1}</h3>
-                <div dangerouslySetInnerHTML={{__html: props.languageChosen === props.primaryLang ? props.questionList[props.index][14] : props.questionList[props.index][19]}}></div>
-                <img src={"data:image/jpeg;base64," + img1 } style={{display: 'block'}} alt="" onClick={() => {setShowImageDialog(true)}}/>
-                
+                <h3>Question number {props.index + 1}</h3>
+                <div dangerouslySetInnerHTML={{ __html: props.languageChosen === props.primaryLang ? props.questionList[props.index][14] : props.questionList[props.index][19] }}></div>
+                <img src={"data:image/jpeg;base64," + img1} style={{ display: 'block' }} alt="" onClick={() => { setShowImageDialog(true) }} />
+
                 {showImageDialog && <ImageDialog img={img1} setShowImageDialog={setShowImageDialog} ></ImageDialog>}
 
                 {/* <Dialog open={showImageDialog} onClose={() => setShowImageDialog(false)}>
@@ -191,12 +191,12 @@ export default function Body (props) {
 
             </section>}
             {showOptions && <section className={styles.options}>
-                
+
                 <ul onChange={radioHandler}>
                     <li>
                         <label htmlFor="opt1"><input type="radio" name="ans" id={props.questionList[props.index][27][0].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][0].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][15] : props.questionList[props.index][20]}</label>
                     </li>
-                    <li> 
+                    <li>
                         <label htmlFor="opt2"><input type="radio" name="ans" id={props.questionList[props.index][27][2].toLowerCase()} checked={props.answerValue === props.questionList[props.index][27][2].toLowerCase()} />{props.languageChosen === props.primaryLang ? props.questionList[props.index][16] : props.questionList[props.index][21]}</label>
                     </li>
                     {props.questionList[props.index][17] && <li>
@@ -208,7 +208,7 @@ export default function Body (props) {
                 </ul>
             </section>}
 
-            {props.showSubmitDialog && <SubmitDialog endTheExam={props.endTheExam} allowReview={props.allowReview} legendCtn={props.legendCtn} setShowSubmitDialog={props.setShowSubmitDialog} />}
+            {props.showSubmitDialog && <SubmitDialog seperateTimer={props.seperateTimer} endTheExam={props.endTheExam} allowReview={props.allowReview} legendCtn={props.legendCtn} setShowSubmitDialog={props.setShowSubmitDialog} />}
         </div>
     )
 }

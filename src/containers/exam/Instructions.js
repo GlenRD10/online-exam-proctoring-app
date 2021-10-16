@@ -131,7 +131,7 @@ export default function Instructions(props) {
                 props.setSeperateTimerInSeconds(backendData[0][6]);
             }
             // eslint-disable-next-line eqeqeq
-            if (backendData[0][31] != 0) props.setProctoringEnabled(true);
+            if (backendData[0][9] === 'y') props.setProctoringEnabled(true);
             props.setSendImgTimer(backendData[0][31]);
 
 
