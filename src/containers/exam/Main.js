@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Main() {
     const [endExamState, setEndExamState] = useState('y');
+    const [switchAlert, setSwitchAlert] = useState(true);
 
     // const [seperateTimerEnd, setSeperateTimerEnd] = useState(false);
 
@@ -424,13 +425,28 @@ export default function Main() {
         saveSwitchWindow();
         const myArr = str.toString().split('~');
         // console.log(myArr[1]);  
-        if (myArr[0] <= myArr[1]) {
-            if (proctoringEnabled) {
+        // if (myArr[0] <= myArr[1]) {
+        //     if (proctoringEnabled) {
+        //         setEndExamState('s');
+        //         endTheExam();
+        //     }
+        //     navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
+        //     alert('You have exceeded the maximum window switches that were allowed!');
+        // } else {
+        //     navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
+        //     alert('You Exam has ended!');
+        // }
+        
+        if(switchAlert) {
+            if(parseInt(myArr[0]) > parseInt(myArr[1])) {
+                navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
+                alert('You Exam has ended!');
+            } else {
                 setEndExamState('s');
                 endTheExam();
+                navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
+                alert('You have exceeded the maximum window switches that were allowed!');
             }
-            navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
-            alert('You have exceeded the maximum window switches that were allowed!');
         } else {
             navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
             alert('You Exam has ended!');
@@ -590,7 +606,7 @@ export default function Main() {
 
     return (
         <div>
-            {showInstructions && <Instructions seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} settingsData={settingsData} setSettingsData={setSettingsData} setProctoringEnabled={setProctoringEnabled} setSendImgTimer={setSendImgTimer} setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
+            {showInstructions && <Instructions switchAlert={switchAlert} setSwitchAlert={setSwitchAlert} seperateTimer={seperateTimer} seperateTimerInSeconds={seperateTimerInSeconds} settingsData={settingsData} setSettingsData={setSettingsData} setProctoringEnabled={setProctoringEnabled} setSendImgTimer={setSendImgTimer} setReminder={setReminder} setAllowNavigation={setAllowNavigation} setSeperateTimer={setSeperateTimer} setSeperateTimerInSeconds={setSeperateTimerInSeconds} setLanguageChosen={setLanguageChosen} setPrimaryLang={setPrimaryLang} setSecondaryLang={setSecondaryLang} setAllowMultiLang={setAllowMultiLang} setAllowReview={setAllowReview} data={data} setShowDiv={setShowDiv} setShowInstructions={setShowInstructions} handle={handle} countDown={countDown} timeRemaining={time_remaining} />}
             {(!showInstructions && proctoringEnabled) && <WebcamCap sendImgTimer={sendImgTimer} examData={data} />}
             <FullScreen handle={handle}>
                 {showDiv && <div>
