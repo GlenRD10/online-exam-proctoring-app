@@ -1,19 +1,14 @@
 import React from 'react';
 import styles from './languagebar.module.css';
 
-export default function LanguageBar (props) {
+export default function LanguageBar(props) {
 
     const btnHandler = () => {
-        // if (window.screen.width < 768) {
-            console.log(props.sidebarVisibility);
-            if (props.sidebarVisibility) props.setsidebarVisibility(false);
-            else props.setsidebarVisibility(true);
-            console.log(props.sidebarVisibility);
-        // }
+        if (props.sidebarVisibility) props.setsidebarVisibility(false);
+        else props.setsidebarVisibility(true);
     }
 
     function radioHandler(event) {
-        console.log(event.target.id);
         props.setLanguage(event.target.id);
     }
 

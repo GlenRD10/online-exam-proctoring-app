@@ -2,9 +2,9 @@ import React from 'react';
 import styles from './footer.module.css';
 
 
-export default function Footer (props) {
+export default function Footer(props) {
     function BtnHandler(e) {
-        if(props.index === props.questionList.length - 2 && e.currentTarget.getAttribute("data-value") === "next") {
+        if (props.index === props.questionList.length - 2 && e.currentTarget.getAttribute("data-value") === "next") {
             // props.endTheExam();
             // props.setShow(true);
             props.setShowSubmitDialog(true);
@@ -33,7 +33,7 @@ export default function Footer (props) {
                 {(props.allowNavigation && props.index !== 0) && <button onClick={BtnHandler} data-value="previous" className={styles.previousBtn}><i className="fas fa-angle-double-left"></i>Previous</button>}
                 <button onClick={clearHandler} className={styles.flag}>Clear</button>
                 {props.allowReview && <button className={styles.flag} onClick={reviewHandler}>{props.reviewStatus ? 'Reviewed' : 'Review'}</button>}
-                { <button onClick={BtnHandler} data-value="next" className={styles.nextBtn}>{(props.index === props.questionList.length - 2) ? 'Submit' : 'Next'}<i className="fas fa-angle-double-right"></i></button>}
+                {!props.seperateTimer && <button onClick={BtnHandler} data-value="next" className={styles.nextBtn}>{(props.index === props.questionList.length - 2) ? 'Submit' : 'Next'}<i className="fas fa-angle-double-right"></i></button>}
             </footer>
         </div>
     )

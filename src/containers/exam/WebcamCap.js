@@ -11,7 +11,6 @@ export default function WebcamCap(props) {
 
     const capture = React.useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
-        console.log(imageSrc);
         setImgSrc(imageSrc);
     }, [webcamRef, setImgSrc]);
 
@@ -48,7 +47,6 @@ export default function WebcamCap(props) {
                 data,
                 headers
             });
-            console.log(res);
         } catch (e) {
             console.log(e.response);
         }

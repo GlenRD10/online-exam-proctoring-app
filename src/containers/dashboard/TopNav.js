@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 
 
-export default function TopNav (props) {
+export default function TopNav(props) {
     const history = useNavigate();
     const name = localStorage.getItem('user_name');
     const email = localStorage.getItem('user_id');
@@ -30,7 +30,7 @@ export default function TopNav (props) {
 
     async function logout() {
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
-        
+
 
         data = Object.keys(data).map((key) => {
             return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -41,17 +41,16 @@ export default function TopNav (props) {
         try {
             const res = await axios({
                 method: 'post',
-                url: url + 'student_exam_start',                           
+                url: url + 'online_student_logout',
                 crossDomain: true,
                 data: data,
                 headers
             });
             const parser = new DOMParser();
             const xml = parser.parseFromString(res.data, 'text/xml');
-            const statusReport = xml.querySelector('string').textContent.split('~');
-            console.log(statusReport)
+            // const statusReport = xml.querySelector('string').textContent.split('~');
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 

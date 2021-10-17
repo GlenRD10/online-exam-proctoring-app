@@ -371,7 +371,6 @@ export default function Main() {
             student_end_exam: endExamState
         }
 
-        console.log(endTheExamData);
 
         const url = 'http://103.12.1.55:81/OnlineUNIV_EXAM_LOGSrv1.asmx/';
 
@@ -393,7 +392,6 @@ export default function Main() {
             const xml = parser.parseFromString(res.data, 'text/xml');
             // eslint-disable-next-line no-unused-vars
             const endExamStatus = xml.documentElement.firstChild.data
-            console.log(endExamStatus);
 
         } catch (e) {
             console.log(e.response);
@@ -436,9 +434,9 @@ export default function Main() {
         //     navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
         //     alert('You Exam has ended!');
         // }
-        
-        if(switchAlert) {
-            if(parseInt(myArr[0]) > parseInt(myArr[1])) {
+
+        if (switchAlert) {
+            if (parseInt(myArr[0]) > parseInt(myArr[1])) {
                 navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
                 alert('You Exam has ended!');
             } else {
@@ -542,11 +540,12 @@ export default function Main() {
                 setReminderStatus(true);
             }
             if (remTime.hr === 0 && remTime.min === 0 && remTime.sec === 0) {
-                console.log(index + " " + questionList.length + " " + seperateTimer);
+                // console.log(index + " " + questionList.length + " " + seperateTimer);
                 if ((seperateTimer && index === questionList.length - 2) || !seperateTimer) {
-                    console.log("Ending exam");
-                    endTheExam();
-                    navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
+                    // console.log("Ending exam");
+                    // endTheExam();
+                    setShowSubmitDialog(true);
+                    // navigate('/dashboard', { state: { session_id: localStorage.getItem('session_id'), user_id: localStorage.getItem('user_id') } });
                     clearInterval(mainInterval);
                 }
                 else {

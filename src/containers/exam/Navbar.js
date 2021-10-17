@@ -8,7 +8,6 @@ export default function Nabvar(props) {
     }
 
     function radioHandler(event) {
-        console.log(event.target.id);
         props.setLanguage(event.target.id);
     }
 

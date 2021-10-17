@@ -118,7 +118,6 @@ export default function Instructions(props) {
             const backendData = [...xml.querySelectorAll('anyType')].map((ele) => ele.textContent.split('~'));
             props.setSettingsData(backendData);
             setShowInstructions(true);
-            console.log(backendData);
             props.setAllowReview(backendData[0][0] === 'y' ? true : false);
             props.setAllowMultiLang(backendData[0][13] === 'y' ? true : false);
             props.setAllowNavigation(backendData[0][10] === 'n' ? false : true);
@@ -134,7 +133,7 @@ export default function Instructions(props) {
             if (backendData[0][9] === 'y') props.setProctoringEnabled(true);
             props.setSendImgTimer(backendData[0][31]);
             // eslint-disable-next-line eqeqeq
-            if(parseInt(backendData[0][24]) === 0) props.setSwitchAlert(false);
+            if (parseInt(backendData[0][24]) === 0) props.setSwitchAlert(false);
 
         } catch (e) {
             console.log(e.response);
