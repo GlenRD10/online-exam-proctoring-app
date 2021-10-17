@@ -14,7 +14,7 @@ export default function LanguageBar(props) {
 
     return (
         <nav className={styles.langbar}>
-            <p>Language: {props.allowMultiLang ? '' : props.primaryLang}</p>
+            <p>{props.allowMultiLang ? 'Language: ' : ''}</p>
             {props.allowMultiLang && <span onChange={radioHandler}>
                 <label htmlFor="lang-1"><input type="radio" name="lang" id={props.primaryLang} />{props.primaryLang}</label>
                 <label htmlFor="lang-2"><input type="radio" name="lang" id={props.secondaryLang} />{props.secondaryLang}</label>
